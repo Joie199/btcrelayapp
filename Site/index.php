@@ -7,63 +7,42 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 min-h-screen flex">
-  <!-- Sidebar Menu -->
-  <aside class="w-64 bg-white shadow-lg min-h-screen p-6 space-y-6">
-    <h2 class="text-2xl font-bold text-blue-600">Dashboard</h2>
-    <nav class="flex flex-col space-y-4">
-      <a href="#" class="text-gray-700 hover:text-blue-500 font-medium">🏠 Home</a>
-      <a href="#register" class="text-gray-700 hover:text-blue-500 font-medium">📝 Register</a>
-      <a href="#dashboard" class="text-gray-700 hover:text-blue-500 font-medium">🛒 Vendor Dashboard</a>
-      <a href="#" class="text-gray-700 hover:text-blue-500 font-medium">📦 My Items</a>
-      <a href="#" class="text-gray-700 hover:text-blue-500 font-medium">⚙️ Settings</a>
-    </nav>
-  </aside>
+<?php include 'sidebar.php'; ?>
 
   <!-- Main Content -->
   <main class="flex-1 p-6">
     <div class="max-w-4xl mx-auto">
       <h1 class="text-3xl font-bold text-center mb-8">Multi-Vendor Bitcoin E-commerce</h1>
 
-      <!-- Register Section -->
-      <div id="register" class="bg-white p-6 rounded shadow mb-8">
-        <h2 class="text-xl font-semibold mb-4">Register</h2>
-        <form method="POST" action="register.php" class="grid gap-4">
-          <select name="role" class="p-2 border rounded">
-            <option value="user">User</option>
-            <option value="vendor">Vendor</option>
-          </select>
-          <input type="email" name="email" placeholder="Email" class="p-2 border rounded">
-          <input type="password" name="password" placeholder="Password" class="p-2 border rounded">
-          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Register</button>
-        </form>
-      </div>
 
       <!-- Vendor Dashboard -->
       <div id="dashboard" class="bg-white p-6 rounded shadow">
-        <h2 class="text-xl font-semibold mb-4">Vendor Dashboard</h2>
-        <form method="POST" action="add_item.php" class="grid gap-4 mb-6">
-          <input type="text" name="item_name" placeholder="Item name" class="p-2 border rounded">
-          <input type="text" name="price_btc" placeholder="Price in BTC" class="p-2 border rounded">
-          <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Add Item</button>
-        </form>
-
+        
         <!-- Items List -->
+        <h2 class="text-2xl font-bold mb-4 text-center">🚀 Pitch Summary</h2>
         <div class="grid gap-6">
-          <?php
-            // Example PHP to display items (replace with real DB logic)
-            $items = [
-              ["name" => "T-Shirt", "price" => "0.001"],
-              ["name" => "Ebook", "price" => "0.0005"]
-            ];
-            foreach ($items as $item):
-              $qr = urlencode("bitcoin:your-bitcoin-address?amount=" . $item['price']);
-          ?>
-          <div class="p-4 border rounded shadow">
-            <p class="font-semibold text-lg"><?= htmlspecialchars($item['name']) ?></p>
-            <p class="mb-2">Price: <?= htmlspecialchars($item['price']) ?> BTC</p>
-            <img src="https://api.qrserver.com/v1/create-qr-code/?data=<?= $qr ?>&amp;size=150x150" alt="QR Code">
-          </div>
-          <?php endforeach; ?>
+  <div class="p-6 bg-white rounded-lg shadow border-l-4 border-blue-500">
+    <h3 class="text-2xl font-bold mb-2">📌 Project Name: BitMarket</h3>
+    <p class="text-gray-700">BitMarket is a decentralized e-commerce platform enabling vendors to sell products directly for Bitcoin using QR code payment.</p>
+  </div>
+  <div class="p-6 bg-white rounded-lg shadow border-l-4 border-red-500">
+    <h3 class="text-xl font-semibold mb-2">🚧 Problem to Solve</h3>
+    <p class="text-gray-700">Many sellers in emerging markets lack access to global payment systems. BitMarket bridges that gap using borderless Bitcoin payments with no intermediaries.</p>
+  </div>
+  <div class="p-6 bg-white rounded-lg shadow border-l-4 border-green-500">
+    <h3 class="text-xl font-semibold mb-2">🎯 Target Market</h3>
+    <p class="text-gray-700">Freelancers, small businesses, and independent sellers in Africa and developing regions who want to accept crypto payments.</p>
+  </div>
+  <div class="p-6 bg-white rounded-lg shadow border-l-4 border-yellow-500">
+    <h3 class="text-xl font-semibold mb-2">💸 Revenue Model</h3>
+    <p class="text-gray-700">BitMarket will earn via small service fees per transaction, premium listing features for vendors, and optional wallet integrations.</p>
+  </div>
+  <div class="p-6 bg-white rounded-lg shadow border-l-4 border-purple-500">
+    <h3 class="text-xl font-semibold mb-2">⏳ Time Estimate</h3>
+    <p class="text-gray-700">Prototype in 48 hours for hackathon. MVP within 3-4 weeks. Production-ready in 2-3 months with community feedback.</p>
+  </div>
+</div>
+          
         </div>
       </div>
     </div>
