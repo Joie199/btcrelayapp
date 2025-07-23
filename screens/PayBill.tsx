@@ -12,7 +12,7 @@ import {
 
 import styles from './styles/PayBill.styles';
 import { fetchOwnerName } from './api/PayBill.api';
-
+console.log('✅ styles:', styles);
 export default function PayBill() {
   const [billNumber, setBillNumber] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
