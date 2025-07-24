@@ -43,38 +43,31 @@ curl_close($curl);
 if ($err) {
 echo "cURL Error #:" . $err;
 } else {
-echo $response;
+ $response;
+
 }
  ?>
-      <!-- Vendor Dashboard -->
-      <div id="dashboard" class="bg-white p-6 rounded shadow">
+ <?php
+$wallets = json_decode($response, true)['data'];
+?>
 
-        <!-- Items List -->
-        <h2 class="text-2xl font-bold mb-4 text-center">🚀 Pitch Summary</h2>
-        <div class="grid gap-6">
-          <div class="p-6 bg-white rounded-lg shadow border-l-4 border-blue-500">
-            <h3 class="text-2xl font-bold mb-2">📌 Project Name: BitMarket</h3>
-            <p class="text-gray-700">BitMarket is a decentralized e-commerce platform enabling vendors to sell products directly for Bitcoin using QR code payment.</p>
-          </div>
-          <div class="p-6 bg-white rounded-lg shadow border-l-4 border-red-500">
-            <h3 class="text-xl font-semibold mb-2">🚧 Problem to Solve</h3>
-            <p class="text-gray-700">Many sellers in emerging markets lack access to global payment systems. BitMarket bridges that gap using borderless Bitcoin payments with no intermediaries.</p>
-          </div>
-          <div class="p-6 bg-white rounded-lg shadow border-l-4 border-green-500">
-            <h3 class="text-xl font-semibold mb-2">🎯 Target Market</h3>
-            <p class="text-gray-700">Freelancers, small businesses, and independent sellers in Africa and developing regions who want to accept crypto payments.</p>
-          </div>
-          <div class="p-6 bg-white rounded-lg shadow border-l-4 border-yellow-500">
-            <h3 class="text-xl font-semibold mb-2">💸 Revenue Model</h3>
-            <p class="text-gray-700">BitMarket will earn via small service fees per transaction, premium listing features for vendors, and optional wallet integrations.</p>
-          </div>
-          <div class="p-6 bg-white rounded-lg shadow border-l-4 border-purple-500">
-            <h3 class="text-xl font-semibold mb-2">⏳ Time Estimate</h3>
-            <p class="text-gray-700">Prototype in 48 hours for hackathon. MVP within 3-4 weeks. Production-ready in 2-3 months with community feedback.</p>
-          </div>
-        </div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <?php foreach ($wallets as $wallet): ?>
+    <div class="p-6 bg-white rounded-lg shadow border-l-4 border-blue-500">
+      <h3 class="text-xl font-semibold mb-2"><?php echo $wallet['name']; ?></h3>
+      <p class="text-gray-700 mb-1">💬 <?php echo $wallet['description']; ?></p>
+      <p class="text-gray-800 mb-1">💰 Currency: <strong><?php echo strtoupper($wallet['currency']); ?></strong></p>
+      <?php if ($wallet['currency'] === 'btc'): ?>
+        <p>🟠 Balance: <strong><?php echo number_format($wallet['balance']['btc'], 8); ?> BTC</strong> (<?php echo number_format($wallet['balance']['sat']); ?> sats)</p>
+        <p>💵 USD Estimate: $<?php echo number_format($wallet['balance']['usd'], 2); ?></p>
+      <?php else: ?>
+        <p>💵 Balance: <strong>$<?php echo number_format($wallet['balance']['usd'], 2); ?></strong></p>
+      <?php endif; ?>
+    </div>
+  <?php endforeach; ?>
+</div>
 
-      </div>
+
     </div>
     </div>
   </main>

@@ -14,13 +14,13 @@ if (isset($_SESSION['suser_name'])) {
     $displayedname = $name;
 } else {
     $suser_name = "Guest";
-    $displayedname = "Guest";
+    $displayedname = "Hi 👋🏽";
 }
 
 if (isset($_SESSION['utype']))
     $stype = $_SESSION['utype'];
 else
-    $stype = " ";
+    $stype = "Guest";
 
 
 $hostname = '127.0.0.1';

@@ -46,33 +46,35 @@ curl_close($curl);
 if ($err) {
 echo "cURL Error #:" . $err;
 } else {
-echo $response;
+ $response;
 }
 ?>
-        <!-- Items List -->
-        <h2 class="text-2xl font-bold mb-4 text-center">🚀 Pitch Summary</h2>
-        <div class="grid gap-6">
-          <div class="p-6 bg-white rounded-lg shadow border-l-4 border-blue-500">
-            <h3 class="text-2xl font-bold mb-2">📌 Project Name: BitMarket</h3>
-            <p class="text-gray-700">BitMarket is a decentralized e-commerce platform enabling vendors to sell products directly for Bitcoin using QR code payment.</p>
-          </div>
-          <div class="p-6 bg-white rounded-lg shadow border-l-4 border-red-500">
-            <h3 class="text-xl font-semibold mb-2">🚧 Problem to Solve</h3>
-            <p class="text-gray-700">Many sellers in emerging markets lack access to global payment systems. BitMarket bridges that gap using borderless Bitcoin payments with no intermediaries.</p>
-          </div>
-          <div class="p-6 bg-white rounded-lg shadow border-l-4 border-green-500">
-            <h3 class="text-xl font-semibold mb-2">🎯 Target Market</h3>
-            <p class="text-gray-700">Freelancers, small businesses, and independent sellers in Africa and developing regions who want to accept crypto payments.</p>
-          </div>
-          <div class="p-6 bg-white rounded-lg shadow border-l-4 border-yellow-500">
-            <h3 class="text-xl font-semibold mb-2">💸 Revenue Model</h3>
-            <p class="text-gray-700">BitMarket will earn via small service fees per transaction, premium listing features for vendors, and optional wallet integrations.</p>
-          </div>
-          <div class="p-6 bg-white rounded-lg shadow border-l-4 border-purple-500">
-            <h3 class="text-xl font-semibold mb-2">⏳ Time Estimate</h3>
-            <p class="text-gray-700">Prototype in 48 hours for hackathon. MVP within 3-4 weeks. Production-ready in 2-3 months with community feedback.</p>
-          </div>
-        </div>
+<?php
+$transactions = json_decode($response, true)['data']['transactions'];
+?>
+
+<div class="space-y-4">
+  <?php foreach ($transactions as $tx): ?>
+    <div class="p-4 bg-white rounded-lg shadow border-l-4 border-yellow-500">
+      <div class="flex justify-between items-center mb-2">
+        <h3 class="text-lg font-semibold">💳 <?php echo $tx['description']; ?> — $<?php echo $tx['amount']; ?></h3>
+        <span class="text-sm text-gray-500"><?php echo date("Y-m-d H:i", strtotime($tx['createdAt'])); ?></span>
+      </div>
+
+      <p class="text-sm text-gray-600">🧾 Ref: <span class="font-mono"><?php echo $tx['reference']; ?></span></p>
+      <p class="text-sm text-gray-600">🔁 BTC: <?php echo $tx['btcAmount']; ?> (<?php echo $tx['satAmount']; ?> sats)</p>
+      <p class="text-sm text-gray-600">📦 Wallet: <?php echo $tx['wallet']['name']; ?></p>
+      <p class="text-sm text-gray-600">📍 Status: 
+        <span class="inline-block px-2 py-0.5 rounded text-xs 
+          <?php echo $tx['status'] === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'; ?>">
+          <?php echo ucfirst($tx['status']); ?>
+        </span>
+      </p>
+    </div>
+  <?php endforeach; ?>
+</div>
+
+
 
       </div>
     </div>
