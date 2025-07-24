@@ -37,6 +37,37 @@ $querymember = "INSERT INTO `Hackthon-bitnob`.`members` ( `M_name`, `M_password`
 
 mysqli_query($link, $querymember);
 
+
+ 
+$curl = curl_init();
+ 
+curl_setopt_array($curl, [
+CURLOPT_URL => "https://sandboxapi.bitnob.co/api/v1/wallets/create-new-crypto-wallet",
+CURLOPT_RETURNTRANSFER => true,
+CURLOPT_ENCODING => "",
+CURLOPT_MAXREDIRS => 10,
+CURLOPT_TIMEOUT => 30,
+CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+CURLOPT_CUSTOMREQUEST => "POST",
+CURLOPT_POSTFIELDS => json_encode(['coin' => 'bnb']),
+CURLOPT_HTTPHEADER => [
+  "Authorization: Bearer $key",
+  "accept: application/json",
+  "content-type: application/json"
+],
+]);
+ 
+$response = curl_exec($curl);
+$err = curl_error($curl);
+ 
+curl_close($curl);
+ 
+if ($err) {
+echo "cURL Error #:" . $err;
+} else {
+echo $response;
+}
+
 ?>
 <div class="flex items-center justify-between p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg shadow" role="alert" id="user-created-alert">
   <div class="flex items-center space-x-2">

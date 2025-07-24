@@ -5,7 +5,7 @@ if (session_id() == "") {
     exit();
 }
 ob_start();
-
+$key = "sk.3a846ff0dfb8.7e7ddae08f05636a83433470b";
 
 if (isset($_SESSION['suser_name'])) {
     $suser_name = $_SESSION['suser_name'];
