@@ -5,14 +5,23 @@ if (session_id() == "") {
     exit();
 }
 ob_start();
+$key = "sk.3a846ff0dfb8.7e7ddae08f05636a83433470b";
 
-
-if (isset($_SESSION['suser_name']))
+if (isset($_SESSION['suser_name'])) {
     $suser_name = $_SESSION['suser_name'];
-else
+    $parts = explode('@', $suser_name);
+    $name = $parts[0];
+    $displayedname = $name;
+} else {
     $suser_name = "Guest";
+    $displayedname = "Guest";
+}
+
 if (isset($_SESSION['utype']))
     $stype = $_SESSION['utype'];
+else
+    $stype = " ";
+
 
 $hostname = '127.0.0.1';
 $dbusername = 'root';             // Your old database username.
@@ -33,6 +42,3 @@ $link = new mysqli("$hostname", "$dbusername", "$dbpassword", "$dbname");
 if (mysqli_connect_errno()) {
     die("MySQL connection failed: " . mysqli_connect_error());
 }
-
-
-    ?>

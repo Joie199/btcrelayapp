@@ -28,7 +28,7 @@ include 'config.php';
         <!-- Items List -->
         <div class="grid gap-6">
           <?php
-          $query = "SELECT * FROM `Hackthon-bitnob`.`products` ";
+          $query = "SELECT * FROM `Hackthon-bitnob`.`products` where `user_namel` = '$suser_name'";
 
           $result = mysqli_query($link, $query);
           ?>
