@@ -41,7 +41,10 @@ export default function Dasboard() {
             <Icon name="call-received" type="material" color="#fff" />
             <Text style={styles.actionText}>Receive</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.actionButton}>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => navigation.navigate("SendLightning")}
+          >
             <Icon name="send" type="material" color="#fff" />
             <Text style={styles.actionText}>Send</Text>
           </TouchableOpacity>
