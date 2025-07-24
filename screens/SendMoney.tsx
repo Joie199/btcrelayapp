@@ -8,7 +8,8 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {convertUGXToBTC, createLightningInvoice } from './api/bitnobApi';
+import  style  from './styles/SendMoney.styles';
+ import {convertUGXToBTC, createLightningInvoice } from './api/bitnobApi';
 
 export default function SendMoney() {
   const [phone, setPhone] = useState('');
@@ -37,15 +38,15 @@ export default function SendMoney() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Send Money</Text>
+      <View style={style.container}>
+        <Text style={style.title}>Send Money</Text>
 
-        <Text style={styles.label}>Phone Number</Text>
-        <View style={styles.inputGroup}>
-          <Text style={styles.suffix}>+256</Text>
+        <Text style={style.label}>Phone Number</Text>
+        <View style={style.inputGroup}>
+          <Text style={style.suffix}>+256</Text>
 		  
           <TextInput 
-            style={[styles.input, error && styles.inputError]}
+            style={[style.input, error && style.inputError]}
             keyboardType="number-pad"
             placeholder="7xxxxxxxx"
             value={phone}
@@ -54,85 +55,24 @@ export default function SendMoney() {
             maxLength={9}
           />
         </View>
-        {error ? <Text style={styles.error}>{error}</Text> : null}
+        {error ? <Text style={style.error}>{error}</Text> : null}
 
-        <Text style={styles.label}>Amount</Text>
-        <View style={styles.inputGroup}>
+        <Text style={style.label}>Amount</Text>
+        <View style={style.inputGroup}>
           <TextInput
-            style={styles.input}
+            style={style.input}
             keyboardType="numeric"
             placeholder="Enter amount"
             value={amount}
             onChangeText={setAmount}
           />
-          <Text style={styles.suffix}>UGX</Text>
+          <Text style={style.suffix}>UGX</Text>
         </View>
 
-        <Pressable onPress={handleSend} style={styles.button}>
-          <Text style={styles.buttonText}>Send</Text>
+        <Pressable onPress={handleSend} style={style.button}>
+          <Text style={style.buttonText}>Send</Text>
         </Pressable>
       </View>
     </TouchableWithoutFeedback>
   );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 24,
-    backgroundColor: '#fff',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 24,
-    textAlign: 'center',
-  },
-  label: {
-    marginBottom: 6,
-    fontSize: 14,
-    color: '#007BFF',
-    fontWeight: '600',
-  },
-  inputGroup: {
-    position: 'relative',
-    marginBottom: 16,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 10,
-    padding: 14,
-    fontSize: 16,
-    paddingRight: 60,
-    paddingLeft: 60,
-    backgroundColor: '#fff',
-  },
-  inputError: {
-    borderColor: 'red',
-  },
-  suffix: {
-    position: 'absolute',
-    left: 10,
-    top: 16,
-    fontWeight: 'bold',
-    color: '#000',
-	zIndex:1,
-  },
-  error: {
-    color: 'red',
-    marginBottom: 12,
-  },
-  button: {
-    backgroundColor: '#007BFF',
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-});
+};
