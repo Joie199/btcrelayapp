@@ -8,10 +8,10 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
   },
   title: {
-    fontSize: 24,
+    // fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 24,
-    textAlign: 'center',
+    // textAlign: 'center',
   },
   label: {
     marginBottom: 6,
