@@ -11,9 +11,10 @@
 
     ?>
     <a href="itemadd.php" class="text-gray-700 hover:text-blue-500 font-medium">📝 Add Products</a>
-     <a href="#" class="text-gray-700 hover:text-blue-500 font-medium">📦 list of my Tranactions</a>
-    <a href="#" class="text-gray-700 hover:text-blue-500 font-medium">⚙️ my wallet</a>
+     <a href="mytranctions.php" class="text-gray-700 hover:text-blue-500 font-medium">📦 list of my Tranactions</a>
+    <a href="mywallet.php" class="text-gray-700 hover:text-blue-500 font-medium">⚙️ my wallet</a>
     <a href="listofproducts.php" class="text-gray-700 hover:text-blue-500 font-medium">🛒 List of Your products</a>
+    <a href="profile.php" class="text-gray-700 hover:text-blue-500 font-medium">⚙️ Profile </a>
 
     <?php } ?>
       <?php if ($stype != "vendor") { ?>

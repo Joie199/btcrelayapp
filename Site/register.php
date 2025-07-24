@@ -30,26 +30,23 @@ $passserver = $_POST['passform'];
 $role = $_POST['role'];
 
 
-$querymember = "INSERT INTO `Hackthon-bitnob`.`members` ( `M_name`, `M_password`, `M_type`) VALUES ('$emailserver', '$passserver', '$role');
-";
-
-
-
-mysqli_query($link, $querymember);
-
-
  
 $curl = curl_init();
  
 curl_setopt_array($curl, [
-CURLOPT_URL => "https://sandboxapi.bitnob.co/api/v1/wallets/create-new-crypto-wallet",
+CURLOPT_URL => "https://sandboxapi.bitnob.co/api/v1/addresses/generate",
 CURLOPT_RETURNTRANSFER => true,
 CURLOPT_ENCODING => "",
 CURLOPT_MAXREDIRS => 10,
 CURLOPT_TIMEOUT => 30,
 CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 CURLOPT_CUSTOMREQUEST => "POST",
-CURLOPT_POSTFIELDS => json_encode(['coin' => 'bnb']),
+CURLOPT_POSTFIELDS => json_encode([
+  'label' => 'purchase xbox',
+  'customerEmail' => $emailserver,
+  'formatType' => 'bip21',
+  'amount' => 'string'
+]),
 CURLOPT_HTTPHEADER => [
   "Authorization: Bearer $key",
   "accept: application/json",
@@ -65,10 +62,36 @@ curl_close($curl);
 if ($err) {
 echo "cURL Error #:" . $err;
 } else {
-echo $response;
-}
+  $response=json_decode($response);
+//echo $response;
+//print_r($response->{'data'}->{'bip21'});
+$url = $response->{'data'}->{'bip21'};
 
-?>
+// Parse the scheme and address (e.g., tb1qq...).
+$parts = parse_url($url);
+$bitcoin = $parts['path']; // This gets the Bitcoin address
+
+// Parse the query string into variables
+parse_str($parts['query'], $query);
+
+$lightning = $query['lightning'] ?? null;
+
+// Now you have:
+echo "\n";
+echo "Bitcoin: $bitcoin\n";
+echo "Lightning: $lightning\n";
+$querymember = "INSERT INTO `Hackthon-bitnob`.`members` ( `M_name`, `M_password`, `M_type`,`lightingaddress`,`btcaddress`) VALUES ('$emailserver', '$passserver', '$role','$lightning','$bitcoin');
+";
+
+
+
+mysqli_query($link, $querymember);
+
+
+}
+ 
+ 
+ ?>
 <div class="flex items-center justify-between p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg shadow" role="alert" id="user-created-alert">
   <div class="flex items-center space-x-2">
     <svg class="w-5 h-5 text-green-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
