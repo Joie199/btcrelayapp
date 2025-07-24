@@ -1,3 +1,4 @@
+<?php include 'config.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +20,6 @@
       <div id="register" class="bg-white p-6 rounded shadow mb-8">
         <h2 class="text-xl font-semibold mb-4">Register</h2>
         <?php 
-        include 'config.php';
         if (isset($_POST['register'])) {
             
         

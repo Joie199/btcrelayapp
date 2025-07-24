@@ -1,0 +1,7 @@
+{
+    "require": {
+        "endroid/qr-code": "^6.0",
+        "php": "^8.2",
+		"chillerlan/php-qrcode": "dev-main#<commit_hash>"
+    }
+}
