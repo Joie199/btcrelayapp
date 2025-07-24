@@ -11,6 +11,7 @@ export type RootStackParamList = {
   Home: undefined;
   SendMoney: undefined;
   //ScanQRCode: undefined;
+  PayBill: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -22,7 +23,8 @@ export default function App() {
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
           <Stack.Screen name="SendMoney" component={SendMoney} />
-		  <Stack.Screen name="PayBill" component={PayBill} />
+		      <Stack.Screen name="PayBill" component={PayBill} />
+        
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>

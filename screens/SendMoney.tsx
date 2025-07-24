@@ -8,20 +8,27 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
+import {convertUGXToBTC, createLightningInvoice } from './api/bitnobApi';
 
 export default function SendMoney() {
   const [phone, setPhone] = useState('');
   const [amount, setAmount] = useState('');
   const [error, setError] = useState('');
 
-  const handleSend = () => {
+  const handleSend = async () => {
     const regex = /^7\d{8}$/; // Only 9 digits starting with 7
     if (!regex.test(phone)) {
       setError('Invalid phone number');
       return;
-    }
-    setError('');
+    }try{
+    
     alert(`Sending UGX ${amount} to +256${phone}`);
+    const sats = await convertUGXToBTC(Number(amount));
+    const invoice = await createLightningInvoice(sats, 'Payment for BTC Relay');
+    }catch (err) {
+    console.error(err);
+    alert('Error');
+  }
   };
 
   const handleFocus = () => {
