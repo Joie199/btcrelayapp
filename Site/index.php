@@ -25,8 +25,8 @@
         <h2 class="text-2xl font-bold mb-4 text-center">🚀 Pitch Summary</h2>
         <div class="grid gap-6">
           <div class="p-6 bg-white rounded-lg shadow border-l-4 border-blue-500">
-            <h3 class="text-2xl font-bold mb-2">📌 Project Name: BitMarket</h3>
-            <p class="text-gray-700">BitMarket is a decentralized e-commerce platform enabling vendors to sell products directly for Bitcoin using QR code payment.</p>
+            <h3 class="text-2xl font-bold mb-2">📌 Project Name: Multi-Vendor Bitcoin E-commerce</h3>
+            <p class="text-gray-700">BitMarket is a decentralized e-commerce platform enabling vendors to sell products directly for Bitcoin using QR code payment and enable venders to withdraw their earnings in local currencies.</p>
           </div>
           <div class="p-6 bg-white rounded-lg shadow border-l-4 border-red-500">
             <h3 class="text-xl font-semibold mb-2">🚧 Problem to Solve</h3>
@@ -44,6 +44,10 @@
             <h3 class="text-xl font-semibold mb-2">⏳ Time Estimate</h3>
             <p class="text-gray-700">Prototype in 48 hours for hackathon. MVP within 3-4 weeks. Production-ready in 2-3 months with community feedback.</p>
           </div>
+          <a href="doc/Multi%20vender%20Bitcoin%20introduction.docx" target="_blank" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+  📄 Read Full Document
+</a>
+
         </div>
 
       </div>
