@@ -7,19 +7,15 @@
 ## 🧭 Table of Contents
 1. [About](#about)
 2. [Features](#features)
-3. [Architecture](#architecture)
-4. [Tech Stack](#tech-stack)
-5. [Getting Started](#getting-started)
+3. [Tech Stack](#tech-stack)
+4. [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
-6. [Usage](#usage)
+5. [Usage](#usage)
     - [Web Platform (Vendor & Shop)](#web-platform-vendor--shop)
     - [Vendor Mobile App](#vendor-mobile-app)
-7. [API Integration](#api-integration)
-8. [Configuration](#configuration)
-9. [Project Structure](#project-structure)
-10. [Contributing](#contributing)
-11. [License](#license)
+6. [Contributing](#contributing)
+7. [License](#license)
 
 ---
 
@@ -51,4 +47,79 @@ Here’s a glimpse of our workflow and design thinking:
 
 
 <img src="sharing the mind map/app-flowchart.png" />
-<img src="sharing the mind map/bitnob - Hackathon(v2).png" />
+<img src="sharing the mind map/bitnob - Hackathon(v3).png" />
+
+
+## 🧩 Tech Stack
+
+### 🌐 Site Part
+- Tailwind CSS
+- PHP
+- MySQL 9.01 (database)
+
+### 📱 App Part
+- React Native
+- Expo
+
+---
+
+## 🚀 How to Run the App
+
+```bash
+npm install
+npm start
+```
+
+
+🧼 If You Are on a Fresh OS Environment
+
+# Step 1: Download Node.js for your OS from https://nodejs.org
+# Step 2: Install Expo CLI globally
+npm install -g expo-cli
+
+# Step 3: Clone our repository
+git clone https://github.com/Joie199/btcrelayapp.git
+
+# Step 4: Navigate into the app directory
+cd btcrelayapp/app
+
+# Step 5: Install dependencies
+npm install
+
+# Step 6: Start the development server
+npm start
+
+🌍 How to Run the Website
+
+    Go to the site folder.
+
+    Open it in your local PHP server environment (e.g., XAMPP, MAMP, or using php -S).
+
+    Make sure to:
+
+        Change the username and password for the database connection.
+
+happy coding , and all the best
+        Use your own Bitnob API key in the config file.
+
+
+## 🤝 Contributing
+
+Thanks to all the contributors who helped build BTC Relay App!
+
+### Team Members / Contributors
+
+- [@Joie199](https://github.com/Joie199)
+- [@Samir](https://github.com/samiromer2)
+- [@Ema](https://github.com/ojokne)
+<!-- Add more GitHub usernames here -->
+
+Feel free to open issues, submit PRs, or suggest improvements!
+
+---
+
+## 🪪 License
+
+This project is licensed under the **MIT License** — you’re free to use, modify, and share it with proper attribution.
+
+See the full license in [`LICENSE`](./LICENSE).
