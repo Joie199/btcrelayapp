@@ -8,6 +8,7 @@ import SendMoney from "./screens/SendMoney";
 import PayBill from "./screens/PayBill";
 import LoginPage from "./screens/LoginPage";
 import SendLightning from "screens/SendLightning";
+import Receive from "screens/Receive";
 //import ScanQrCode from './screens/ScanQrCode';
 
 export type RootStackParamList = {
@@ -16,7 +17,8 @@ export type RootStackParamList = {
   //ScanQRCode: undefined;
   PayBill: undefined;
   LoginPage: undefined;
-  SendLightning:undefined
+  SendLightning: undefined;
+  Receive: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -38,8 +40,16 @@ export default function App() {
           />
           <Stack.Screen name="PayBill" component={PayBill} />
           <Stack.Screen name="LoginPage" component={LoginPage} />
-          <Stack.Screen name="SendLightning" component={SendLightning}             options={{ headerShadowVisible: false, title: "Send" }}
- />
+          <Stack.Screen
+            name="SendLightning"
+            component={SendLightning}
+            options={{ headerShadowVisible: false, title: "Send" }}
+          />
+          <Stack.Screen
+            name="Receive"
+            component={Receive}
+            options={{ headerShadowVisible: false, title: "Receive" }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>

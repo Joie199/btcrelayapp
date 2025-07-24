@@ -16,8 +16,8 @@ export default StyleSheet.create({
   label: {
     marginBottom: 6,
     fontSize: 14,
-    color: '#007BFF',
-    fontWeight: '600',
+    // color: '#007BFF',
+    // fontWeight: '600',
   },
   inputGroup: {
     position: 'relative',
@@ -49,7 +49,7 @@ export default StyleSheet.create({
     marginBottom: 12,
   },
   button: {
-    backgroundColor: '#007BFF',
+    backgroundColor: '#1DB954',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
