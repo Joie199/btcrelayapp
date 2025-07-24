@@ -12,7 +12,6 @@ import {
 
 import styles from './styles/PayBill.styles';
 import { fetchOwnerName } from './api/PayBill.api';
-console.log('✅ styles:', styles);
 export default function PayBill() {
   const [billNumber, setBillNumber] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
@@ -119,7 +118,7 @@ const handlePay = () => {
           value={accountNumber}
           onChangeText={setAccountNumber}
           onFocus={() => {
-			setShowInvoice(false); // Clear invoice
+		      	setShowInvoice(false); // Clear invoice
             if (billNumber.length >= 3) {
               handleFetchOwnerName();
             }
