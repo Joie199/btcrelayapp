@@ -1,12 +1,14 @@
 import axios from 'axios';
 
-const BITNOB_API = 'https://sandboxapi.bitnob.co/api/v1/transactions/?order=ASC&page=1&take=10';
-const API_KEY = 'sk.95eaf7335030.33e1eacd7b46ca1b8ea6e7a47'; // Keep this secret
+const BITNOB_API = 'https://sandboxapi.bitnob.co/api/v1/mobile-payments/initiate';
+const API_KEY = ''; // Keep this secret
 
 const headers = {
   Authorization: `Bearer ${API_KEY}`,
   'Content-Type': 'application/json',
+  
 };
+
 
 export async function convertUGXToBTC(ugxAmount: number): Promise<number> {
   const response = await axios.get(`${BITNOB_API}/v1/convert`, {
