@@ -44,7 +44,7 @@
             <h3 class="text-xl font-semibold mb-2">⏳ Time Estimate</h3>
             <p class="text-gray-700">Prototype in 48 hours for hackathon. MVP within 3-4 weeks. Production-ready in 2-3 months with community feedback.</p>
           </div>
-          <a href="doc/Multi%20vender%20Bitcoin%20introduction.docx" target="_blank" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+          <a href="https://github.com/Joie199/btcrelayapp/blob/main/doc/Multi%20vender%20Bitcoin%20introduction.docx" target="_blank" class="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
   📄 Read Full Document
 </a>
 
