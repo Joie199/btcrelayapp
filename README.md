@@ -48,6 +48,15 @@ Here’s a glimpse of our workflow and design thinking:
 
 <img src="sharing the mind map/app-flowchart.png" />
 <img src="sharing the mind map/bitnob - Hackathon(v3).png" />
+<img src="screenshots/app/mainlayout.jpg" />
+<img src="screenshots/app/venderloginpage.jpg" />
+<img src="screenshots/site/products list.png" />
+<img src="screenshots/site/qrtopay.png" />
+
+
+
+
+
 
 
 ## 🧩 Tech Stack
