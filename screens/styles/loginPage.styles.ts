@@ -2,7 +2,7 @@
 
 import { StyleSheet } from 'react-native';
 
-const styles = StyleSheet.create({
+const style = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
@@ -14,10 +14,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 4,
   },
-  button: {
-       
 
-  },
   input: {
     borderWidth: 1,
     borderColor: '#aaa',
@@ -26,6 +23,29 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     marginBottom: 16,
   },
+   button: {
+    backgroundColor: '#1DB954',
+    paddingVertical: 14,
+    borderRadius: 8,
+    marginTop: 8,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  registerLink: {
+  textAlign: 'center',
+  fontSize: 14,
+  color: '#555',
+  marginTop: 16,
+},
+registerLinkBold: {
+  color: '#1DB954',
+  fontWeight: 'bold',
+},
+
 });
 
-export default styles;
+export default style;

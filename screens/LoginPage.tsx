@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { TouchableOpacity } from 'react-native';
 import { View, TextInput, Button, Text, Alert } from 'react-native';
-import styles from './styles/loginPage.styles';
+import style from './styles/loginPage.styles';
 import { Icon } from 'react-native-elements';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -32,27 +33,33 @@ const LoginPage = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Email</Text>
+    <View style={style.container}>
+      <Text style={style.label}>Email</Text>
       <TextInput
-        style={styles.input}
+        style={style.input}
         placeholder="Email"
         keyboardType="email-address"
         value={Email}
         onChangeText={setEmail}
       />
 
-      <Text style={styles.label}>Password</Text>
+      <Text style={style.label}>Password</Text>
       <TextInput
-        style={styles.input}
+        style={style.input}
         placeholder="Enter your password"
         keyboardType="default"
         secureTextEntry
         value={password}
-        onChangeText={setPassword}
-      />
-
-      <Button title="Login" onPress={handleLogin} />
+        onChangeText={setPassword}  />
+      
+       <TouchableOpacity style={style.button} onPress={handleLogin}>
+              <Text style={style.buttonText}>Login</Text>
+            </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+            <Text style={style.registerLink}>
+              New member? <Text style={style.registerLinkBold}>Register</Text>
+            </Text>
+       </TouchableOpacity>
     </View>
   );
 };

@@ -9,6 +9,7 @@ import PayBill from "./screens/PayBill";
 import LoginPage from "./screens/LoginPage";
 import SendLightning from "screens/SendLightning";
 import Receive from "screens/Receive";
+import SignIn from "screens/SignIn";
 //import ScanQrCode from './screens/ScanQrCode';
 
 export type RootStackParamList = {
@@ -19,6 +20,7 @@ export type RootStackParamList = {
   LoginPage: undefined;
   SendLightning: undefined;
   Receive: undefined;
+  SignIn :undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -50,6 +52,7 @@ export default function App() {
             component={Receive}
             options={{ headerShadowVisible: false, title: "Receive" }}
           />
+          <Stack.Screen name="SignIn" component={SignIn} />
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>

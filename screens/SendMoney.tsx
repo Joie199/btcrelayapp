@@ -8,10 +8,13 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Modal,
+  TouchableOpacity,
+  Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import style from "./styles/SendMoney.styles";
-import { convertUGXToBTC, createLightningInvoice } from "./api/bitnobApi";
+
+//import { convertUGXToBTC, createLightningInvoice } from "./api/bitnobApi";
 
 export default function SendMoney() {
   const [phone, setPhone] = useState("");
@@ -19,9 +22,12 @@ export default function SendMoney() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const navigation = useNavigation<any>();
+  const [isFocused, setIsFocused] = useState(false); //display minimum amount
+  const [selectedNetwork, setSelectedNetwork] = useState<'MTN' | 'AIRTEL' | null>(null); //choosing mobile Network
 
   const handleSend = async () => {
     const regex = /^7\d{8}$/; // Only 9 digits starting with 7
+    
     if (!regex.test(phone)) {
       setError("Invalid phone number");
       return;
@@ -145,7 +151,30 @@ export default function SendMoney() {
             maxLength={9}
           />
         </View>
+
         {error ? <Text style={style.error}>{error}</Text> : null}
+      
+        <View style={style.networkRow}>
+              <TouchableOpacity onPress={() => setSelectedNetwork('MTN')}>
+                      <Image
+                        source={require('../assets/mtn.jpg')}
+                        style={[
+                          style.networkImage,
+                          selectedNetwork === 'MTN' && style.selectedImage,
+                        ]}
+                      />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => setSelectedNetwork('AIRTEL')}>
+                  <Image
+                    source={require('../assets/airtel.jpg')}
+                    style={[
+                      style.networkImage,
+                      selectedNetwork === 'AIRTEL' && style.selectedImage,
+                    ]}
+                  />
+                </TouchableOpacity>
+            </View>
+
 
         <Text style={style.label}>Amount</Text>
         <View style={style.inputGroup}>
@@ -155,29 +184,33 @@ export default function SendMoney() {
             placeholder="Enter amount"
             value={amount}
             onChangeText={setAmount}
-          />
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}/>
           <Text style={style.suffix}>UGX</Text>
         </View>
-
-        <Pressable onPress={handleSend} style={style.button}>
-          <Text style={style.buttonText}>Send</Text>
-        </Pressable>
+         <View style={style.container}>
+              {isFocused && (
+                <Text style={style.hint}>Minimum amount is 1000 UGX</Text>
+              )}
+          </View>   
+            <Pressable onPress={handleSend} style={style.button}>
+              <Text style={style.buttonText}>Send</Text>
+            </Pressable>
 
         {/* Success Modal */}
         <Modal visible={success} transparent animationType="fade">
-          <View style={styles.modalOverlay}>
-            <View style={styles.modalContent}>
-              <Text style={styles.successText}>
+          <View style={style.modalOverlay}>
+            <View style={style.modalContent}>
+              <Text style={style.successText}>
                 You should receive a notification soon!
               </Text>
               <Pressable
-                style={styles.homeButton}
+                style={style.homeButton}
                 onPress={() => {
                   setSuccess(false);
                   navigation.navigate("Home");
-                }}
-              >
-                <Text style={styles.homeButtonText}>Done</Text>
+                }}>
+                <Text style={style.homeButtonText}>Done</Text>
               </Pressable>
             </View>
           </View>
@@ -185,38 +218,4 @@ export default function SendMoney() {
       </View>
     </TouchableWithoutFeedback>
   );
-}
-
-const styles = StyleSheet.create({
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalContent: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 24,
-    alignItems: "center",
-    width: "80%",
-  },
-  successText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: "#1DB954",
-    textAlign: "center",
-  },
-  homeButton: {
-    backgroundColor: "#1DB954",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 8,
-  },
-  homeButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-});
+};
