@@ -120,7 +120,7 @@ Thanks to all the contributors who helped build BTC Relay App!
 
 - [@Joie199](https://github.com/Joie199)
 - [@Samir](https://github.com/samiromer2)
-- [@Ema](https://github.com/ojokne)
+- [@Emmanuel Ojok](https://github.com/ojokne)
 <!-- Add more GitHub usernames here -->
 
 Feel free to open issues, submit PRs, or suggest improvements!
