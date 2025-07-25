@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -27,6 +27,7 @@ type NavProps = NativeStackNavigationProp<RootStackParamList, "Home">;
 export default function Dasboard() {
   const walletBalance = "0.123 BTC";
   const navigation = useNavigation<NavProps>();
+  const [showBalance, setShowBalance] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -42,8 +43,23 @@ export default function Dasboard() {
       <StatusBar style="dark" />
       {/* Top Section: Wallet Balance */}
       <View style={styles.balanceSection}>
-        <Text style={styles.balanceLabel}>Wallet Balance</Text>
-        <Text style={styles.balanceValue}>{walletBalance}</Text>
+        <View style={styles.balanceHeader}>
+          <Text style={styles.balanceLabel}>Wallet Balance</Text>
+          <TouchableOpacity
+            style={styles.eyeButton}
+            onPress={() => setShowBalance((prev) => !prev)}
+          >
+            <Icon
+              name={showBalance ? "visibility-off" : "visibility"}
+              type="material"
+              color="#fff"
+              size={26}
+            />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.balanceValue}>
+          {showBalance ? walletBalance : "••••••••"}
+        </Text>
       </View>
 
       {/* Quick Actions */}
@@ -108,23 +124,35 @@ const styles = StyleSheet.create({
     marginTop: 24,
   },
   balanceSection: {
-    // backgroundColor: "#222",
-    // backgroundColor:"#1DB954",
     backgroundColor: "#FF9900",
     borderRadius: 20,
     padding: 24,
     alignItems: "center",
     marginBottom: 24,
+    position: "relative",
+  },
+  balanceHeader: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   balanceLabel: {
     color: "#fff",
     fontSize: 16,
+    marginBottom: 8,
+    fontWeight: "bold",
+  },
+  eyeButton: {
+    padding: 4,
     marginBottom: 8,
   },
   balanceValue: {
     color: "#fff",
     fontSize: 32,
     fontWeight: "bold",
+    letterSpacing: 2,
+    marginTop: 8,
   },
   actionsSection: {
     marginBottom: 24,
@@ -140,7 +168,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   actionButton: {
-    // backgroundColor: "#007AFF",
     backgroundColor: "#fff",
     borderRadius: 10,
     padding: 16,
@@ -163,16 +190,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    // elevation: 1,
   },
   transactionType: {
-    // fontWeight: "bold",
     color: "#222",
     flex: 1,
   },
   transactionAmount: {
-    // color: "#007AFF",
-    // flex: 1,
     textAlign: "center",
   },
   transactionDate: {
