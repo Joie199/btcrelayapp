@@ -12,6 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { auth } from "config/firebase";
 import { onAuthStateChanged, User } from "@firebase/auth";
+import QRCode from "react-native-qrcode-svg";
 
 export default function Receive() {
   const [amount, setAmount] = useState("");
@@ -22,6 +23,7 @@ export default function Receive() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const navigation = useNavigation<any>();
 
+  let logoFromFile = require("../assets/bitcoin.png");
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
       if (user) {
@@ -117,7 +119,12 @@ export default function Receive() {
 
         {invoice ? (
           <View style={styles.invoiceBox}>
-            <Text style={styles.invoiceLabel}>Lightning Invoice:</Text>
+            <Text style={styles.invoiceLabel}>Lightning Invoice</Text>
+            <QRCode
+              value={invoice}
+              size={200}
+              logo={logoFromFile}
+            />
             <Text selectable style={styles.invoiceText}>
               {invoice}
             </Text>
@@ -182,15 +189,19 @@ const styles = StyleSheet.create({
     marginTop: 16,
     borderWidth: 1,
     borderColor: "#FF9900",
+    flex: 1,
+    alignItems: "center",
   },
   invoiceLabel: {
     fontWeight: "bold",
     marginBottom: 8,
     color: "#FF9900",
+    textAlign: "center",
   },
   invoiceText: {
     color: "#222",
-    fontSize: 14,
+    fontSize: 10,
+    marginTop: 6,
     // wordBreak: "break-all",
   },
 });
