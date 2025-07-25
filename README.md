@@ -48,6 +48,15 @@ Here’s a glimpse of our workflow and design thinking:
 
 <img src="sharing the mind map/app-flowchart.png" />
 <img src="sharing the mind map/bitnob - Hackathon(v3).png" />
+<img src="screenshots/app/mainlayout.jpg" />
+<img src="screenshots/app/venderloginpage.jpg" />
+<img src="screenshots/site/products list.png" />
+<img src="screenshots/site/qrtopay.png" />
+
+
+
+
+
 
 
 ## 🧩 Tech Stack
@@ -109,9 +118,11 @@ Thanks to all the contributors who helped build BTC Relay App!
 
 ### Team Members / Contributors
 
-- [@Joie199](https://github.com/Joie199)
-- [@Samir](https://github.com/samiromer2)
-- [@Ema](https://github.com/ojokne)
+- [@Yohannes Amanuel](https://github.com/Joie199)
+- [@Samir Ibrahim](https://github.com/samiromer2)
+- [@Emmanuel Ojok](https://github.com/ojokne)
+- [@Mohammed Okasha](https://github.com/okasha308)
+- [@Aaron](https://github.com/AaronAfewerqi)
 <!-- Add more GitHub usernames here -->
 
 Feel free to open issues, submit PRs, or suggest improvements!
