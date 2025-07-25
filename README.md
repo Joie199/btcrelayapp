@@ -52,7 +52,7 @@ Here’s a glimpse of our workflow and design thinking:
 <img src="screenshots/app/venderloginpage.jpg" />
 <img src="screenshots/site/products list.png" />
 <img src="screenshots/site/qrtopay.png" />
-<img src="screenshots/site/app-flowchart(v2).png" />
+<img src="sharing the mind map/app-flowchart(V2).png" />
 
 
 
