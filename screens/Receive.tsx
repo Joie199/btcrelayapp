@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,10 +7,13 @@ import {
   Pressable,
   Keyboard,
   TouchableWithoutFeedback,
-  Modal,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
+import { auth } from "config/firebase";
+import { onAuthStateChanged, User } from "@firebase/auth";
+import QRCode from "react-native-qrcode-svg";
+import * as Clipboard from "expo-clipboard";
 
 export default function Receive() {
   const [amount, setAmount] = useState("");
@@ -18,7 +21,20 @@ export default function Receive() {
   const [invoice, setInvoice] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const navigation = useNavigation<any>();
+
+  let logoFromFile = require("../assets/bitcoin.png");
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
+      if (user) {
+        setUserEmail(user.email);
+      } else {
+        setUserEmail(null);
+      }
+    });
+    return unsubscribe;
+  }, []);
 
   const handleGenerateInvoice = async () => {
     setError("");
@@ -31,22 +47,35 @@ export default function Receive() {
       setError("Enter a description.");
       return;
     }
+    if (!userEmail) {
+      setError("User not authenticated.");
+      return;
+    }
     setLoading(true);
+
     try {
-      // Replace with your actual API endpoint
-      const res = await fetch(`${process.env.LIGHTNING_API}/generate-invoice`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: Number(amount),
-          description,
-        }),
-      });
-      const data = await res.json();
-      if (data.invoice) {
-        setInvoice(data.invoice);
+      const res = await fetch(
+        `${process.env.BITNOB_API}/api/v1/wallets/ln/createinvoice`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.BITNOB_SECRET_KEY}`,
+          },
+          body: JSON.stringify({
+            satoshis: Number(amount),
+            customerEmail: userEmail,
+            description: description,
+            // expiresAt: new Date(Date.now() + 3600 * 1000).toISOString(), // Example: 1 hour expiry
+          }),
+        }
+      );
+      const resData = await res.json();
+
+      if (resData.status) {
+        setInvoice(resData.data.request);
       } else {
-        setError(data.message || "Failed to generate invoice.");
+        setError(resData.message || "Failed to generate invoice.");
       }
     } catch (err) {
       setError("Failed to generate invoice.");
@@ -54,11 +83,15 @@ export default function Receive() {
     setLoading(false);
   };
 
+  const handleCopyInvoice = async () => {
+    await Clipboard.setStringAsync(invoice);
+    alert("Invoice copied to clipboard!");
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-
       <View style={styles.container}>
-      <StatusBar style="dark" />
+        <StatusBar style="dark" />
         <Text style={styles.title}>Receive Lightning Payment</Text>
 
         <Text style={styles.label}>Amount (sats)</Text>
@@ -92,10 +125,18 @@ export default function Receive() {
 
         {invoice ? (
           <View style={styles.invoiceBox}>
-            <Text style={styles.invoiceLabel}>Lightning Invoice:</Text>
+            <Text style={styles.invoiceLabel}>Lightning Invoice</Text>
+            <QRCode
+              value={invoice}
+              size={160}
+              logo={logoFromFile}
+            />
             <Text selectable style={styles.invoiceText}>
               {invoice}
             </Text>
+            <Pressable style={styles.copyButton} onPress={handleCopyInvoice}>
+              <Text style={styles.copyButtonText}>Copy Invoice</Text>
+            </Pressable>
           </View>
         ) : null}
       </View>
@@ -136,7 +177,7 @@ const styles = StyleSheet.create({
   error: {
     color: "#ff5252",
     marginBottom: 8,
-    textAlign: "center",
+    // textAlign: "center",
   },
   generateButton: {
     backgroundColor: "#1DB954",
@@ -157,15 +198,32 @@ const styles = StyleSheet.create({
     marginTop: 16,
     borderWidth: 1,
     borderColor: "#FF9900",
+    flex: 1,
+    alignItems: "center",
   },
   invoiceLabel: {
     fontWeight: "bold",
     marginBottom: 8,
     color: "#FF9900",
+    textAlign: "center",
   },
   invoiceText: {
     color: "#222",
-    fontSize: 14,
+    fontSize: 10,
+    marginTop: 6,
     // wordBreak: "break-all",
+  },
+  copyButton: {
+    backgroundColor: "#f7f8fa",
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    marginTop: 12,
+    alignItems: "center",
+  },
+  copyButtonText: {
+    color: "#1DB954",
+    fontWeight: "bold",
+    fontSize: 15,
   },
 });
