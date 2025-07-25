@@ -10,7 +10,7 @@ import {
 import { Icon } from "react-native-elements";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { onAuthStateChanged, signOut, User } from "@firebase/auth";
 import { auth } from "config/firebase";
 import { StatusBar } from "expo-status-bar";
@@ -38,6 +38,7 @@ export default function Dasboard() {
   const [showBalance, setShowBalance] = useState(false);
   const [invoices, setInvoices] = useState<any[]>([]);
   const [fetchingInvoices, setFetchingVoices] = useState(true);
+  
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -47,55 +48,57 @@ export default function Dasboard() {
     }
   };
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user: User | null) => {
-      if (user) {
-        try {
-          setFetchingVoices(true);
-          const db = getFirestore();
-          const q = query(
-            collection(db, "invoices"),
-            where("userId", "==", user.uid)
-          );
-          const querySnapshot = await getDocs(q);
-          const invoiceDocs = querySnapshot.docs.map((doc) => doc.data());
+  useFocusEffect(
+    React.useCallback(() => {
+      const unsubscribe = onAuthStateChanged(auth, async (user: User | null) => {
+        if (user) {
+          try {
+            setFetchingVoices(true);
+            const db = getFirestore();
+            const q = query(
+              collection(db, "invoices"),
+              where("userId", "==", user.uid)
+            );
+            const querySnapshot = await getDocs(q);
+            const invoiceDocs = querySnapshot.docs.map((doc) => doc.data());
 
-          // Parallel requests to Bitnob API
-          const results = await Promise.all(
-            invoiceDocs.map(async (inv) => {
-              const res = await fetch(
-                "https://sandboxapi.bitnob.co/api/v1/wallets/ln/getinvoice",
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${process.env.BITNOB_SECRET_KEY}`,
-                  },
-                  body: JSON.stringify({ request: inv.request }),
+            // Parallel requests to Bitnob API
+            const results = await Promise.all(
+              invoiceDocs.map(async (inv) => {
+                const res = await fetch(
+                  "https://sandboxapi.bitnob.co/api/v1/wallets/ln/getinvoice",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${process.env.BITNOB_SECRET_KEY}`,
+                    },
+                    body: JSON.stringify({ request: inv.request }),
+                  }
+                );
+                const data = await res.json();
+                // Only include if status is not "expired"
+                if (data.status && data.data.status !== "expired") {
+                  return data.data;
                 }
-              );
-              const data = await res.json();
-              // Only include if status is not "expired"
-              if (data.status && data.data.status !== "expired") {
-                return data.data;
-              }
-              return null;
-            })
-          );
+                return null;
+              })
+            );
 
-          setInvoices(results.filter(Boolean));
-          setFetchingVoices(false);
-        } catch (e) {
-          setInvoices([]);
-          setFetchingVoices(false);
-          console.log(e);
+            setInvoices(results.filter(Boolean));
+            setFetchingVoices(false);
+          } catch (e) {
+            setInvoices([]);
+            setFetchingVoices(false);
+            console.log(e);
+          }
+        } else {
+          navigation.replace("LoginPage");
         }
-      } else {
-        navigation.replace("LoginPage");
-      }
-    });
-    return unsubscribe;
-  }, []);
+      });
+      return () => unsubscribe();
+    }, [])
+  );
 
   return (
     <ScrollView style={styles.container}>
@@ -204,9 +207,9 @@ export default function Dasboard() {
                 <Icon name="calendar-today" type="material" color="#888" size={14} />{" "}
                 {new Date(inv.createdAt).toLocaleString()}
               </Text>
-              <Text style={styles.invoiceRequest} selectable numberOfLines={1}>
+              {/* <Text style={styles.invoiceRequest} selectable numberOfLines={1}>
                 {inv.request}
-              </Text>
+              </Text> */}
             </View>
           ))
       )}
