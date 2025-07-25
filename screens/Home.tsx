@@ -41,6 +41,15 @@ export default function Dasboard() {
   return (
     <ScrollView style={styles.container}>
       <StatusBar style="dark" />
+
+      {/* Greeting & Logout */}
+      <View style={styles.greetingRow}>
+        <Text style={styles.greetingText}>Hello 👋</Text>
+        <TouchableOpacity style={styles.logoutIconBtn} onPress={handleLogout}>
+          <Icon name="logout" type="material" color="#1DB954" size={28} />
+        </TouchableOpacity>
+      </View>
+
       {/* Top Section: Wallet Balance */}
       <View style={styles.balanceSection}>
         <View style={styles.balanceHeader}>
@@ -105,13 +114,6 @@ export default function Dasboard() {
           </View>
         ))}
       </View>
-
-      {/* Logout Button */}
-      <View style={{ marginTop: 16, alignItems: "center" }}>
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.logoutButtonText}>Logout</Text>
-        </TouchableOpacity>
-      </View>
     </ScrollView>
   );
 }
@@ -122,6 +124,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#f7f8fa",
     padding: 16,
     marginTop: 24,
+  },
+  greetingRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 10,
+    marginTop: 8,
+  },
+  greetingText: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#222",
+  },
+  logoutIconBtn: {
+    padding: 6,
   },
   balanceSection: {
     backgroundColor: "#FF9900",
@@ -202,19 +219,5 @@ const styles = StyleSheet.create({
     color: "#888",
     flex: 1,
     textAlign: "right",
-  },
-  logoutButton: {
-    backgroundColor: "#fff",
-    paddingVertical: 14,
-    paddingHorizontal: 40,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 8,
-    color: "#1DB954",
-  },
-  logoutButtonText: {
-    color: "#1DB954",
-    fontWeight: "bold",
-    fontSize: 16,
   },
 });
