@@ -23,7 +23,7 @@
         if (isset($_POST['register'])) {
             
         
-print_r($_POST);
+//print_r($_POST);
 
 $emailserver = $_POST['emailform'];
 $passserver = $_POST['passform'];

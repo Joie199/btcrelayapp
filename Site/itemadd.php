@@ -26,17 +26,12 @@
         if (isset($_POST['add'])) {
 
 
-          print_r($_POST);
+         // print_r($_POST);
 
           $productname = $_POST['productname'];
           $price = $_POST['price'];
-
-
-
           $querymember = "INSERT INTO `Hackthon-bitnob`.`products` ( `pname`, `price`, `user_namel`) VALUES ('$productname', '$price', '$suser_name');
 ";
-
-
 
           mysqli_query($link, $querymember);
 

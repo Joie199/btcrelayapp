@@ -28,7 +28,7 @@ include 'config.php';
         <!-- Items List -->
         <div class="grid gap-6">
           <?php
-        print_r($_POST);
+        //print_r($_POST);
         $uname = $_POST['user_namel'];  
         $price = $_POST['price'];  
         $pname = $_POST['pname'];  
@@ -110,8 +110,15 @@ $response=json_decode($response);
 //echo $response;
 //print_r($response->{'data'}->{'bip21'});
 echo "<br>";
-echo $url = $response->{'data'}->{'request'};
-
+$url = $response->{'data'}->{'request'};
+?>
+<div class="p-6 bg-white rounded-lg shadow border-l-4 border-red-500 w-full">
+  <h3 class="text-xl font-semibold mb-2">🚧 Lightning Invoice</h3>
+  <p class="text-gray-700 break-all text-sm leading-relaxed overflow-hidden">
+    <?php echo htmlspecialchars($url); ?>
+  </p>
+</div>
+<?php
             // Example PHP to display items (replace with real DB logic)
             $items = [
               ["name" => $pname, "price" => $price],

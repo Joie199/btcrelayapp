@@ -18,37 +18,37 @@
       
       <!-- Member 1 -->
       <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-        <h2 class="text-xl font-semibold text-blue-600 mb-2">1. Samir Omer</h2>
-        <p class="text-sm text-gray-600 mb-1">📧 samir@example.com</p>
-        <p class="text-sm text-gray-600">🐱 <a href="https://github.com/samirgithub" target="_blank" class="text-blue-500 hover:underline">github.com/samirgithub</a></p>
+        <h2 class="text-xl font-semibold text-blue-600 mb-2">1. Samir Ibrahim</h2>
+        <p class="text-sm text-gray-600 mb-1">📧 samir@btchubafrica.com</p>
+        <p class="text-sm text-gray-600">🐱 <a href="https://github.com/samiromer2" target="_blank" class="text-blue-500 hover:underline">github.com/samirgithub</a></p>
       </div>
 
       <!-- Member 2 -->
       <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-        <h2 class="text-xl font-semibold text-blue-600 mb-2">2. Amina Yusuf</h2>
-        <p class="text-sm text-gray-600 mb-1">📧 amina@example.com</p>
+        <h2 class="text-xl font-semibold text-blue-600 mb-2">2. Yohannes Amanuel</h2>
+        <p class="text-sm text-gray-600 mb-1">📧 yohannes@btchubafrica.com</p>
         <p class="text-sm text-gray-600">🐱 <a href="https://github.com/aminagit" target="_blank" class="text-blue-500 hover:underline">github.com/aminagit</a></p>
       </div>
 
       <!-- Member 3 -->
       <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-        <h2 class="text-xl font-semibold text-blue-600 mb-2">3. Khalid Musa</h2>
-        <p class="text-sm text-gray-600 mb-1">📧 khalid@example.com</p>
-        <p class="text-sm text-gray-600">🐱 <a href="https://github.com/khaliddev" target="_blank" class="text-blue-500 hover:underline">github.com/khaliddev</a></p>
+        <h2 class="text-xl font-semibold text-blue-600 mb-2">3. Emmanuel Ojok</h2>
+        <p class="text-sm text-gray-600 mb-1">📧 -</p>
+        <p class="text-sm text-gray-600">🐱 <a href="https://github.com/ojokne" target="_blank" class="text-blue-500 hover:underline">github.com/khaliddev</a></p>
       </div>
 
       <!-- Member 4 -->
       <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-        <h2 class="text-xl font-semibold text-blue-600 mb-2">4. Lina Abebe</h2>
-        <p class="text-sm text-gray-600 mb-1">📧 lina@example.com</p>
-        <p class="text-sm text-gray-600">🐱 <a href="https://github.com/linalabs" target="_blank" class="text-blue-500 hover:underline">github.com/linalabs</a></p>
+        <h2 class="text-xl font-semibold text-blue-600 mb-2">4.Mohammed Okasha</h2>
+        <p class="text-sm text-gray-600 mb-1">📧 okasha@btchubafrica.com</p>
+        <p class="text-sm text-gray-600">🐱 <a href="https://github.com/okasha308" target="_blank" class="text-blue-500 hover:underline">github.com/linalabs</a></p>
       </div>
 
       <!-- Member 5 -->
       <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
-        <h2 class="text-xl font-semibold text-blue-600 mb-2">5. Dawit Bekele</h2>
-        <p class="text-sm text-gray-600 mb-1">📧 dawit@example.com</p>
-        <p class="text-sm text-gray-600">🐱 <a href="https://github.com/dawitcodes" target="_blank" class="text-blue-500 hover:underline">github.com/dawitcodes</a></p>
+        <h2 class="text-xl font-semibold text-blue-600 mb-2">5. Aaron Afewerqi</h2>
+        <p class="text-sm text-gray-600 mb-1">📧 -</p>
+        <p class="text-sm text-gray-600">🐱 <a href="github.com/AaronAfewerqi" target="_blank" class="text-blue-500 hover:underline">github.com/dawitcodes</a></p>
       </div>
     </div>
 
