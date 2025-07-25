@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,10 +7,11 @@ import {
   Pressable,
   Keyboard,
   TouchableWithoutFeedback,
-  Modal,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
+import { auth } from "config/firebase";
+import { onAuthStateChanged, User } from "@firebase/auth";
 
 export default function Receive() {
   const [amount, setAmount] = useState("");
@@ -18,7 +19,19 @@ export default function Receive() {
   const [invoice, setInvoice] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const navigation = useNavigation<any>();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
+      if (user) {
+        setUserEmail(user.email);
+      } else {
+        setUserEmail(null);
+      }
+    });
+    return unsubscribe;
+  }, []);
 
   const handleGenerateInvoice = async () => {
     setError("");
@@ -31,22 +44,35 @@ export default function Receive() {
       setError("Enter a description.");
       return;
     }
+    if (!userEmail) {
+      setError("User not authenticated.");
+      return;
+    }
     setLoading(true);
+
     try {
-      // Replace with your actual API endpoint
-      const res = await fetch(`${process.env.LIGHTNING_API}/generate-invoice`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount: Number(amount),
-          description,
-        }),
-      });
-      const data = await res.json();
-      if (data.invoice) {
-        setInvoice(data.invoice);
+      const res = await fetch(
+        `${process.env.BITNOB_API}/api/v1/wallets/ln/createinvoice`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.BITNOB_SECRET_KEY}`,
+          },
+          body: JSON.stringify({
+            satoshis: Number(amount),
+            customerEmail: userEmail,
+            description: description,
+            // expiresAt: new Date(Date.now() + 3600 * 1000).toISOString(), // Example: 1 hour expiry
+          }),
+        }
+      );
+      const resData = await res.json();
+
+      if (resData.status) {
+        setInvoice(resData.data.request);
       } else {
-        setError(data.message || "Failed to generate invoice.");
+        setError(resData.message || "Failed to generate invoice.");
       }
     } catch (err) {
       setError("Failed to generate invoice.");
@@ -56,9 +82,8 @@ export default function Receive() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-
       <View style={styles.container}>
-      <StatusBar style="dark" />
+        <StatusBar style="dark" />
         <Text style={styles.title}>Receive Lightning Payment</Text>
 
         <Text style={styles.label}>Amount (sats)</Text>
@@ -136,7 +161,7 @@ const styles = StyleSheet.create({
   error: {
     color: "#ff5252",
     marginBottom: 8,
-    textAlign: "center",
+    // textAlign: "center",
   },
   generateButton: {
     backgroundColor: "#1DB954",
