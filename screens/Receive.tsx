@@ -14,6 +14,7 @@ import { auth } from "config/firebase";
 import { onAuthStateChanged, User } from "@firebase/auth";
 import QRCode from "react-native-qrcode-svg";
 import * as Clipboard from "expo-clipboard";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
 
 export default function Receive() {
   const [amount, setAmount] = useState("");
@@ -74,6 +75,17 @@ export default function Receive() {
 
       if (resData.status) {
         setInvoice(resData.data.request);
+
+        // Store in Firestore
+        const db = getFirestore();
+        const userId = auth.currentUser?.uid;
+        if (userId) {
+          await addDoc(collection(db, "invoices"), {
+            request: resData.data.request,
+            userId: userId,
+            createdAt: new Date().toISOString(),
+          });
+        }
       } else {
         setError(resData.message || "Failed to generate invoice.");
       }

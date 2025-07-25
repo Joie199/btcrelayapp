@@ -1,18 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 import { Icon } from "react-native-elements";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
 import { useNavigation } from "@react-navigation/native";
-import { signOut } from "@firebase/auth";
+import { onAuthStateChanged, signOut, User } from "@firebase/auth";
 import { auth } from "config/firebase";
 import { StatusBar } from "expo-status-bar";
+import {
+  collection,
+  getDocs,
+  getFirestore,
+  query,
+  where,
+} from "firebase/firestore";
 
 const recentTransactions = [
   { id: 1, type: "Received", amount: "0.05 BTC", date: "2025-07-23" },
@@ -28,7 +36,8 @@ export default function Dasboard() {
   const walletBalance = "0.123 BTC";
   const navigation = useNavigation<NavProps>();
   const [showBalance, setShowBalance] = useState(false);
-
+  const [invoices, setInvoices] = useState<any[]>([]);
+  const [fetchingInvoices, setFetchingVoices] = useState(true);
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -37,6 +46,56 @@ export default function Dasboard() {
       alert("Failed to log out. Please try again.");
     }
   };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user: User | null) => {
+      if (user) {
+        try {
+          setFetchingVoices(true);
+          const db = getFirestore();
+          const q = query(
+            collection(db, "invoices"),
+            where("userId", "==", user.uid)
+          );
+          const querySnapshot = await getDocs(q);
+          const invoiceDocs = querySnapshot.docs.map((doc) => doc.data());
+
+          // Parallel requests to Bitnob API
+          const results = await Promise.all(
+            invoiceDocs.map(async (inv) => {
+              const res = await fetch(
+                "https://sandboxapi.bitnob.co/api/v1/wallets/ln/getinvoice",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${process.env.BITNOB_SECRET_KEY}`,
+                  },
+                  body: JSON.stringify({ request: inv.request }),
+                }
+              );
+              const data = await res.json();
+              // Only include if status is not "expired"
+              if (data.status && data.data.status !== "expired") {
+                return data.data;
+              }
+              return null;
+            })
+          );
+
+          setInvoices(results.filter(Boolean));
+          setFetchingVoices(false);
+        } catch (e) {
+          setInvoices([]);
+          setFetchingVoices(false);
+          console.log(e);
+        }
+      } else {
+        navigation.replace("LoginPage");
+      }
+    });
+    return unsubscribe;
+  }, []);
 
   return (
     <ScrollView style={styles.container}>
@@ -103,17 +162,54 @@ export default function Dasboard() {
         </View>
       </View>
 
-      {/* Recent Transactions */}
-      <View style={styles.transactionsSection}>
-        <Text style={styles.sectionTitle}>Recent Transactions</Text>
-        {recentTransactions.map((tx) => (
-          <View key={tx.id} style={styles.transactionItem}>
-            <Text style={styles.transactionType}>{tx.type}</Text>
-            <Text style={styles.transactionAmount}>{tx.amount}</Text>
-            <Text style={styles.transactionDate}>{tx.date}</Text>
-          </View>
-        ))}
-      </View>
+      <Text style={styles.sectionTitle}>Recent Invoices</Text>
+      {fetchingInvoices ? (
+        <View style={styles.loadingBox}>
+          <ActivityIndicator size="large" color="#1DB954" />
+          <Text style={styles.loadingText}>Loading invoices...</Text>
+        </View>
+      ) : invoices.length === 0 ? (
+        <Text style={styles.emptyText}>No invoices found.</Text>
+      ) : (
+        invoices
+          .sort(
+            (a, b) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          )
+          .slice(0, 2)
+          .map((inv) => (
+            <View key={inv.id} style={styles.invoiceCard}>
+              <View style={styles.invoiceTopRow}>
+                <Text style={styles.invoiceDesc}>{inv.description}</Text>
+                <View
+                  style={[
+                    styles.statusBadge,
+                    inv.status === "paid"
+                      ? { backgroundColor: "#1DB954" }
+                      : inv.status === "unpaid"
+                      ? { backgroundColor: "#FF9900" }
+                      : { backgroundColor: "#888" },
+                  ]}
+                >
+                  <Text style={styles.statusBadgeText}>
+                    {inv.status.toUpperCase()}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.invoiceMidRow}>
+                <Icon name="bolt" type="material" color="#FFD600" size={22} />
+                <Text style={styles.invoiceAmount}>{inv.tokens} sats</Text>
+              </View>
+              <Text style={styles.invoiceDate}>
+                <Icon name="calendar-today" type="material" color="#888" size={14} />{" "}
+                {new Date(inv.createdAt).toLocaleString()}
+              </Text>
+              <Text style={styles.invoiceRequest} selectable numberOfLines={1}>
+                {inv.request}
+              </Text>
+            </View>
+          ))
+      )}
     </ScrollView>
   );
 }
@@ -196,28 +292,76 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontWeight: "600",
   },
-  transactionsSection: {
-    marginBottom: 24,
+  loadingBox: {
+    alignItems: "center",
+    marginVertical: 24,
   },
-  transactionItem: {
+  loadingText: {
+    marginTop: 8,
+    color: "#888",
+  },
+  emptyText: {
+    color: "#888",
+    textAlign: "center",
+    marginTop: 24,
+  },
+  invoiceCard: {
     backgroundColor: "#fff",
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 10,
+    borderRadius: 12,
+    padding: 18,
+    marginBottom: 14,
+    shadowColor: "#000",
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  invoiceTopRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginBottom: 6,
   },
-  transactionType: {
+  statusBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  statusBadgeText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 12,
+    letterSpacing: 1,
+  },
+  invoiceDesc: {
+    fontWeight: "bold",
+    fontSize: 16,
     color: "#222",
     flex: 1,
   },
-  transactionAmount: {
-    textAlign: "center",
+  invoiceMidRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 6,
+    gap: 6,
   },
-  transactionDate: {
+  invoiceAmount: {
+    color: "#1DB954",
+    fontWeight: "bold",
+    fontSize: 15,
+    marginLeft: 6,
+  },
+  invoiceDate: {
     color: "#888",
-    flex: 1,
-    textAlign: "right",
+    fontSize: 13,
+    marginBottom: 4,
+    marginTop: 2,
+  },
+  invoiceRequest: {
+    color: "#222",
+    fontSize: 12,
+    marginTop: 4,
+    backgroundColor: "#f7f8fa",
+    padding: 6,
+    borderRadius: 6,
   },
 });
