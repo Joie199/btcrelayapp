@@ -13,6 +13,7 @@ import { StatusBar } from "expo-status-bar";
 import { auth } from "config/firebase";
 import { onAuthStateChanged, User } from "@firebase/auth";
 import QRCode from "react-native-qrcode-svg";
+import * as Clipboard from "expo-clipboard";
 
 export default function Receive() {
   const [amount, setAmount] = useState("");
@@ -82,6 +83,11 @@ export default function Receive() {
     setLoading(false);
   };
 
+  const handleCopyInvoice = async () => {
+    await Clipboard.setStringAsync(invoice);
+    alert("Invoice copied to clipboard!");
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
@@ -122,12 +128,15 @@ export default function Receive() {
             <Text style={styles.invoiceLabel}>Lightning Invoice</Text>
             <QRCode
               value={invoice}
-              size={200}
+              size={160}
               logo={logoFromFile}
             />
             <Text selectable style={styles.invoiceText}>
               {invoice}
             </Text>
+            <Pressable style={styles.copyButton} onPress={handleCopyInvoice}>
+              <Text style={styles.copyButtonText}>Copy Invoice</Text>
+            </Pressable>
           </View>
         ) : null}
       </View>
@@ -203,5 +212,18 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginTop: 6,
     // wordBreak: "break-all",
+  },
+  copyButton: {
+    backgroundColor: "#f7f8fa",
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    marginTop: 12,
+    alignItems: "center",
+  },
+  copyButtonText: {
+    color: "#1DB954",
+    fontWeight: "bold",
+    fontSize: 15,
   },
 });
