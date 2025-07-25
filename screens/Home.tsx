@@ -316,7 +316,6 @@ const styles = StyleSheet.create({
     shadowColor: "#000",
     shadowOpacity: 0.06,
     shadowRadius: 6,
-    elevation: 2,
   },
   invoiceTopRow: {
     flexDirection: "row",
