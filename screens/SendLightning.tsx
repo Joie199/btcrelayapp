@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { onAuthStateChanged, User } from "@firebase/auth";
 import { auth } from "config/firebase";
+import { Icon } from "react-native-elements";
 // import { BarCodeScanner } from "expo-barcode-scanner";
 
 export default function SendLightning() {
@@ -81,24 +82,30 @@ export default function SendLightning() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <StatusBar style="dark" />
-        {/* <Text style={styles.title}>Send Lightning Payment</Text> */}
 
         <Text style={styles.label}>Lightning Invoice</Text>
-        <TextInput
-          style={[styles.input, error && styles.inputError]}
-          placeholder="Paste Lightning invoice"
-          value={invoice}
-          onChangeText={setInvoice}
-        />
+        <View style={styles.inputWithIcon}>
+          <TextInput
+            style={[
+              styles.input,
+              error && styles.inputError,
+              { flex: 1, marginBottom: 0 },
+            ]}
+            placeholder="Paste Lightning invoice"
+            value={invoice}
+            onChangeText={setInvoice}
+          />
+          {invoice.length > 0 && (
+            <Pressable
+              onPress={() => setInvoice("")}
+              style={styles.clearButton}
+            >
+              <Icon name="close" type="material" color="#888" size={22} />
+            </Pressable>
+          )}
+        </View>
 
         {error ? <Text style={styles.error}>{error}</Text> : null}
-
-        {/* <Pressable
-          style={styles.scanButton}
-          onPress={() => setScanning(true)}
-        >
-          <Text style={styles.scanButtonText}>Scan QR Code</Text>
-        </Pressable> */}
 
         <Pressable style={styles.sendButton} onPress={handleSend}>
           <Text style={styles.sendButtonText}>Send Payment</Text>
@@ -163,7 +170,6 @@ const styles = StyleSheet.create({
     color: "#222",
   },
   input: {
-    borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 8,
     padding: 12,
@@ -251,5 +257,19 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     fontSize: 16,
+  },
+  inputWithIcon: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    marginBottom: 12,
+    paddingRight: 8,
+  },
+  clearButton: {
+    padding: 6,
+    marginLeft: 2,
   },
 });
