@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   TextInput,
@@ -15,7 +15,7 @@ import { Icon } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
-import { signInWithEmailAndPassword } from "@firebase/auth";
+import { onAuthStateChanged, signInWithEmailAndPassword } from "@firebase/auth";
 import { auth } from "config/firebase";
 
 type NavProps = NativeStackNavigationProp<RootStackParamList, "LoginPage">;
@@ -27,6 +27,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
   const handleLogin = async () => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -44,13 +45,47 @@ const LoginPage = () => {
       setIsLoading(true);
       await signInWithEmailAndPassword(auth, Email, password);
       navigation.replace("Home");
-    } catch (error) {
-      console.log(error);
+      setError("");
+    } catch (e: any) {
       setIsLoading(false);
+      let code = e.code;
+      console.log(code);
+      switch (code) {
+        case "auth/invalid-email":
+          setError("Invalid credentials.");
+          break;
+        case "auth/wrong-password":
+          setError("Invalid credentials.");
+          break;
+        case "auth/user-not-found":
+          setError("Incorrect email or password.");
+          break;
+        case "auth/invalid-credential":
+          setError("Invalid credentials.");
+          break;
+        case "auth/network-request-failed":
+          setError("Network request failed. Please check your connection.");
+          break;
+        case "auth/too-many-requests":
+          setError(
+            "Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or try again later."
+          );
+          break;
+        default:
+          setError("There was a problem with your request.");
+      }
     }
-
-    setError("");
   };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigation.replace("Home");
+      }
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
     <KeyboardAvoidingView

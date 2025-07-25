@@ -10,6 +10,8 @@ import { Icon } from "react-native-elements";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
 import { useNavigation } from "@react-navigation/native";
+import { signOut } from "@firebase/auth";
+import { auth } from "config/firebase";
 
 const recentTransactions = [
   { id: 1, type: "Received", amount: "0.05 BTC", date: "2025-07-23" },
@@ -24,6 +26,15 @@ type NavProps = NativeStackNavigationProp<RootStackParamList, "Home">;
 export default function Dasboard() {
   const walletBalance = "0.123 BTC";
   const navigation = useNavigation<NavProps>();
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      navigation.replace("LoginPage");
+    } catch (e) {
+      alert("Failed to log out. Please try again.");
+    }
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -71,6 +82,13 @@ export default function Dasboard() {
             <Text style={styles.transactionDate}>{tx.date}</Text>
           </View>
         ))}
+      </View>
+
+      {/* Logout Button */}
+      <View style={{ marginTop: 16, alignItems: "center" }}>
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Text style={styles.logoutButtonText}>Logout</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -155,5 +173,19 @@ const styles = StyleSheet.create({
     color: "#888",
     flex: 1,
     textAlign: "right",
+  },
+  logoutButton: {
+    backgroundColor: "#fff",
+    paddingVertical: 14,
+    paddingHorizontal: 40,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 8,
+    color:"#1DB954"
+  },
+  logoutButtonText: {
+    color:"#1DB954",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
