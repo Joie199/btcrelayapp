@@ -8,6 +8,8 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Modal,
+  TouchableOpacity,
+  Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import style from "./styles/SendMoney.styles";
@@ -19,6 +21,13 @@ export default function SendMoney() {
   const [amount, setAmount] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [isFocused, setIsFocused] = useState(false); //display minimum amount
+  const [selectedNetwork, setSelectedNetwork] = useState<
+    "MTN" | "AIRTEL" | null
+  >(null); //choosing mobile Network
+
+  const [loading, setLoading] = useState(false);
+
   const navigation = useNavigation<any>();
 
   const handleSend = async () => {
@@ -28,6 +37,17 @@ export default function SendMoney() {
       return;
     }
 
+    if (!selectedNetwork) {
+      setError("Choose Mobile Network");
+      return;
+    }
+
+    if (Number(amount) < 5000) {
+      setError("Minimum amount is UGX 5000");
+      return
+    }
+    setError("")
+    setLoading(true);
     try {
       // Step 1: Get quote
       const quoteRes = await fetch(
@@ -68,7 +88,7 @@ export default function SendMoney() {
               beneficiary: {
                 type: "MOBILEMONEY",
                 accountName: "Btc Hub", // Replace with actual name if available
-                network: "AIRTEL",
+                network: selectedNetwork,
                 accountNumber: `256${phone}`,
               },
             }),
@@ -94,7 +114,10 @@ export default function SendMoney() {
 
           if (finalizeData.status) {
             setSuccess(true);
+            setLoading(false);
           } else {
+            setLoading(false);
+
             if (finalizeData.message) {
               alert(finalizeData.message);
               console.log(finalizeData);
@@ -103,6 +126,8 @@ export default function SendMoney() {
             }
           }
         } else {
+          setLoading(false);
+
           if (resData.message) {
             alert(resData.message);
             console.log(resData);
@@ -111,6 +136,8 @@ export default function SendMoney() {
           }
         }
       } else {
+        setLoading(false);
+
         if (quoteData.message) {
           alert(quoteData.message);
           console.log(quoteData);
@@ -120,6 +147,7 @@ export default function SendMoney() {
       }
     } catch (err) {
       console.error(err);
+      setLoading(false);
     }
   };
 
@@ -129,10 +157,10 @@ export default function SendMoney() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-
       <View style={[style.container, { backgroundColor: "#f7f8fa" }]}>
-      <StatusBar style="dark" />
+        <StatusBar style="dark" />
         <Text style={style.title}>Send to mobile money</Text>
+        {error ? <Text style={style.error}>{error}</Text> : null}
 
         <Text style={style.label}>Phone Number</Text>
         <View style={style.inputGroup}>
@@ -148,8 +176,27 @@ export default function SendMoney() {
             maxLength={9}
           />
         </View>
-        {error ? <Text style={style.error}>{error}</Text> : null}
 
+        <View style={styles.networkRow}>
+          <TouchableOpacity onPress={() => setSelectedNetwork("MTN")}>
+            <Image
+              source={require("../assets/mtn.jpeg")}
+              style={[
+                styles.networkImage,
+                selectedNetwork === "MTN" && styles.selectedImage,
+              ]}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setSelectedNetwork("AIRTEL")}>
+            <Image
+              source={require("../assets/airtel.jpg")}
+              style={[
+                styles.networkImage,
+                selectedNetwork === "AIRTEL" && styles.selectedImage,
+              ]}
+            />
+          </TouchableOpacity>
+        </View>
         <Text style={style.label}>Amount</Text>
         <View style={style.inputGroup}>
           <TextInput
@@ -158,12 +205,19 @@ export default function SendMoney() {
             placeholder="Enter amount"
             value={amount}
             onChangeText={setAmount}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
           />
           <Text style={style.suffix}>UGX</Text>
         </View>
+        {isFocused && (
+          <Text style={styles.hint}>Minimum amount is 5000 UGX</Text>
+        )}
 
         <Pressable onPress={handleSend} style={style.button}>
-          <Text style={style.buttonText}>Send</Text>
+          <Text style={style.buttonText}>
+            {loading ? "Sending..." : "Send"}
+          </Text>
         </Pressable>
 
         {/* Success Modal */}
@@ -221,5 +275,50 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     fontSize: 16,
+  },
+  hint: {
+    marginTop: -1,
+    color: "gray",
+    fontSize: 14,
+  },
+  networkRow: {
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    marginTop: 12,
+    marginBottom: 24,
+    gap: 28,
+    // paddingLeft: 30,
+    marginVertical: 8,
+  },
+
+  networkImageWrapper: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 8,
+    backgroundColor: "#fff",
+  },
+
+  selectedWrapper: {
+    borderColor: "#1DB954",
+    backgroundColor: "#E8F5E9",
+  },
+
+  networkImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    resizeMode: "contain",
+    backgroundColor: "#fff",
+    padding: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 0, // For Android shadow
+  },
+  selectedImage: {
+    borderWidth: 2,
+    borderColor: "#1DB954",
   },
 });
