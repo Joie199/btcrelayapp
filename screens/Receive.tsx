@@ -56,9 +56,9 @@ export default function Receive() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <StatusBar style="dark" />
 
       <View style={styles.container}>
+      <StatusBar style="dark" />
         <Text style={styles.title}>Receive Lightning Payment</Text>
 
         <Text style={styles.label}>Amount (sats)</Text>

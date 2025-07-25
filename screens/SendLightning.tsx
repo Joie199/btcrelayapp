@@ -43,9 +43,9 @@ export default function SendLightning() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <StatusBar style="dark" />
 
       <View style={styles.container}>
+      <StatusBar style="dark" />
         {/* <Text style={styles.title}>Send Lightning Payment</Text> */}
 
         <Text style={styles.label}>Lightning Invoice</Text>

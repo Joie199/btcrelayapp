@@ -129,9 +129,9 @@ export default function SendMoney() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <StatusBar style="dark" />
 
       <View style={[style.container, { backgroundColor: "#f7f8fa" }]}>
+      <StatusBar style="dark" />
         <Text style={style.title}>Send to mobile money</Text>
 
         <Text style={style.label}>Phone Number</Text>
