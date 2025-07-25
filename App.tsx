@@ -9,6 +9,7 @@ import PayBill from "./screens/PayBill";
 import LoginPage from "./screens/LoginPage";
 import SendLightning from "screens/SendLightning";
 import Receive from "screens/Receive";
+import Signup from "screens/Signup";
 //import ScanQrCode from './screens/ScanQrCode';
 
 export type RootStackParamList = {
@@ -19,6 +20,7 @@ export type RootStackParamList = {
   LoginPage: undefined;
   SendLightning: undefined;
   Receive: undefined;
+  Signup: undefined
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -39,7 +41,18 @@ export default function App() {
             options={{ headerShadowVisible: false, title: "Withdraw" }}
           />
           <Stack.Screen name="PayBill" component={PayBill} />
-          <Stack.Screen name="LoginPage" component={LoginPage} />
+          <Stack.Screen
+            name="LoginPage"
+            component={LoginPage}
+            options={{ headerShown: false }}
+          />
+
+          <Stack.Screen
+            name="Signup"
+            component={Signup}
+            options={{ headerShown: false }}
+          />
+
           <Stack.Screen
             name="SendLightning"
             component={SendLightning}

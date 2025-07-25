@@ -16,19 +16,19 @@ import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../App';
 
-type NavProps = NativeStackNavigationProp<RootStackParamList, 'LoginPage'>;
+type NavProps = NativeStackNavigationProp<RootStackParamList, 'Signup'>;
 
-const LoginPage = () => {
+const Signup = () => {
   const navigation = useNavigation<NavProps>();
-  const [Email, setEmail] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
-  const handleLogin = () => {
+  const handleSignup = () => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!regex.test(Email)) {
+    if (!regex.test(email)) {
       setError('Invalid email address');
       return;
     }
@@ -39,7 +39,7 @@ const LoginPage = () => {
     }
 
     setError('');
-    Alert.alert('Login Success', `Welcome, ${Email}`);
+    Alert.alert('Signup Success', `Welcome, ${email}`);
     navigation.replace('Home');
   };
 
@@ -51,8 +51,8 @@ const LoginPage = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={localStyles.container}>
           <View style={localStyles.header}>
-            <Icon name="account-circle" type="material" color="#1DB954" size={60} />
-            <Text style={localStyles.title}>Sign In</Text>
+            <Icon name="person-add" type="material" color="#1DB954" size={60} />
+            <Text style={localStyles.title}>Sign Up</Text>
           </View>
 
           <Text style={localStyles.label}>Email</Text>
@@ -60,7 +60,7 @@ const LoginPage = () => {
             style={localStyles.input}
             placeholder="Email"
             keyboardType="email-address"
-            value={Email}
+            value={email}
             onChangeText={setEmail}
             autoCapitalize="none"
           />
@@ -69,7 +69,7 @@ const LoginPage = () => {
           <View style={localStyles.inputWithIcon}>
             <TextInput
               style={[localStyles.input, { flex: 1, marginBottom: 0 }]}
-              placeholder="Enter your password"
+              placeholder="Create a password"
               keyboardType="default"
               secureTextEntry={!showPassword}
               value={password}
@@ -91,16 +91,16 @@ const LoginPage = () => {
 
           {error ? <Text style={localStyles.error}>{error}</Text> : null}
 
-          <Pressable style={localStyles.button} onPress={handleLogin}>
-            <Text style={localStyles.buttonText}>Login</Text>
+          <Pressable style={localStyles.button} onPress={handleSignup}>
+            <Text style={localStyles.buttonText}>Sign Up</Text>
           </Pressable>
 
           <Pressable
             style={localStyles.signupLink}
-            onPress={() => navigation.navigate('Signup' as never)}
+            onPress={() => navigation.navigate('LoginPage' as never)}
           >
             <Text style={localStyles.signupText}>
-              Don't have an account? <Text style={{ color: "#1DB954", fontWeight: "bold" }}>Sign Up</Text>
+              Already have an account? <Text style={{ color: "#1DB954", fontWeight: "bold" }}>Sign In</Text>
             </Text>
           </Pressable>
         </View>
@@ -141,6 +141,7 @@ const localStyles = StyleSheet.create({
     paddingVertical: 12,
     marginBottom: 16,
     fontSize: 16,
+    color: '#222',
   },
   inputWithIcon: {
     flexDirection: 'row',
@@ -185,4 +186,4 @@ const localStyles = StyleSheet.create({
   },
 });
 
-export default LoginPage;
+export default Signup;
