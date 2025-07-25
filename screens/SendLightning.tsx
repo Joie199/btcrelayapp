@@ -108,7 +108,9 @@ export default function SendLightning() {
         {error ? <Text style={styles.error}>{error}</Text> : null}
 
         <Pressable style={styles.sendButton} onPress={handleSend}>
-          <Text style={styles.sendButtonText}>Send Payment</Text>
+          <Text style={styles.sendButtonText}>
+            {loading ? "Processing..." : "Send Payment"}
+          </Text>
         </Pressable>
 
         {/* QR Scanner Modal */}
