@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,6 +11,8 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
+import { onAuthStateChanged, User } from "@firebase/auth";
+import { auth } from "config/firebase";
 // import { BarCodeScanner } from "expo-barcode-scanner";
 
 export default function SendLightning() {
@@ -19,6 +21,8 @@ export default function SendLightning() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
   const navigation = useNavigation<any>();
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleBarCodeScanned = ({ data }: { data: string }) => {
     setScanning(false);
@@ -31,21 +35,52 @@ export default function SendLightning() {
       return;
     }
     setError("");
+    setLoading(true);
+
     try {
-      // TODO: Replace with actual API call to pay Lightning invoice
-      // Example:
-      // await fetch("/api/pay-lightning", { method: "POST", body: JSON.stringify({ invoice }) });
-      setSuccess(true);
+      const res = await fetch(
+        `${process.env.BITNOB_API}/api/v1/wallets/ln/pay`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.BITNOB_SECRET_KEY}`,
+          },
+          body: JSON.stringify({
+            request: invoice,
+            reference: "hdhdsujhbkanmsnjsanasjas",
+            customerEmail: userEmail,
+          }),
+        }
+      );
+      const resData = await res.json();
+
+      if (resData.status) {
+        setSuccess(true); // Show success modal
+      } else {
+        setError(resData.message || "Failed to pay invoice.");
+      }
     } catch (err) {
-      setError("Failed to send payment.");
+      setError("Failed to pay invoice.");
     }
+    setLoading(false);
   };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
+      if (user) {
+        setUserEmail(user.email);
+      } else {
+        setUserEmail(null);
+      }
+    });
+    return unsubscribe;
+  }, []);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-
       <View style={styles.container}>
-      <StatusBar style="dark" />
+        <StatusBar style="dark" />
         {/* <Text style={styles.title}>Send Lightning Payment</Text> */}
 
         <Text style={styles.label}>Lightning Invoice</Text>
@@ -97,7 +132,7 @@ export default function SendLightning() {
                   navigation.navigate("Home");
                 }}
               >
-                <Text style={styles.homeButtonText}>Go to Home</Text>
+                <Text style={styles.homeButtonText}>Done</Text>
               </Pressable>
             </View>
           </View>
@@ -141,7 +176,6 @@ const styles = StyleSheet.create({
   error: {
     color: "#ff5252",
     marginBottom: 8,
-    textAlign: "center",
   },
   scanButton: {
     backgroundColor: "#1DB954",
