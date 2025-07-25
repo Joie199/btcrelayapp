@@ -20,6 +20,7 @@ import {
   onAuthStateChanged,
 } from "@firebase/auth";
 import { auth } from "config/firebase";
+import { StatusBar } from "expo-status-bar";
 
 type NavProps = NativeStackNavigationProp<RootStackParamList, "Signup">;
 
@@ -91,6 +92,8 @@ const Signup = () => {
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+      <StatusBar style="dark" />
+
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={localStyles.container}>
           <View style={localStyles.header}>

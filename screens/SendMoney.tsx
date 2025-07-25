@@ -12,6 +12,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import style from "./styles/SendMoney.styles";
 import { convertUGXToBTC, createLightningInvoice } from "./api/bitnobApi";
+import { StatusBar } from "expo-status-bar";
 
 export default function SendMoney() {
   const [phone, setPhone] = useState("");
@@ -128,6 +129,8 @@ export default function SendMoney() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <StatusBar style="dark" />
+
       <View style={[style.container, { backgroundColor: "#f7f8fa" }]}>
         <Text style={style.title}>Send to mobile money</Text>
 

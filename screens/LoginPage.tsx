@@ -17,6 +17,7 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
 import { onAuthStateChanged, signInWithEmailAndPassword } from "@firebase/auth";
 import { auth } from "config/firebase";
+import { StatusBar } from "expo-status-bar";
 
 type NavProps = NativeStackNavigationProp<RootStackParamList, "LoginPage">;
 
@@ -92,6 +93,8 @@ const LoginPage = () => {
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+      <StatusBar style="dark" />
+
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={localStyles.container}>
           <View style={localStyles.header}>

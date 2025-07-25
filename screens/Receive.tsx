@@ -10,6 +10,7 @@ import {
   Modal,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 
 export default function Receive() {
   const [amount, setAmount] = useState("");
@@ -55,6 +56,8 @@ export default function Receive() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <StatusBar style="dark" />
+
       <View style={styles.container}>
         <Text style={styles.title}>Receive Lightning Payment</Text>
 
@@ -90,7 +93,9 @@ export default function Receive() {
         {invoice ? (
           <View style={styles.invoiceBox}>
             <Text style={styles.invoiceLabel}>Lightning Invoice:</Text>
-            <Text selectable style={styles.invoiceText}>{invoice}</Text>
+            <Text selectable style={styles.invoiceText}>
+              {invoice}
+            </Text>
           </View>
         ) : null}
       </View>

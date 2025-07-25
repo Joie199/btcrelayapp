@@ -10,6 +10,7 @@ import {
   Modal,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 // import { BarCodeScanner } from "expo-barcode-scanner";
 
 export default function SendLightning() {
@@ -42,6 +43,8 @@ export default function SendLightning() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <StatusBar style="dark" />
+
       <View style={styles.container}>
         {/* <Text style={styles.title}>Send Lightning Payment</Text> */}
 
@@ -62,10 +65,7 @@ export default function SendLightning() {
           <Text style={styles.scanButtonText}>Scan QR Code</Text>
         </Pressable> */}
 
-        <Pressable
-          style={styles.sendButton}
-          onPress={handleSend}
-        >
+        <Pressable style={styles.sendButton} onPress={handleSend}>
           <Text style={styles.sendButtonText}>Send Payment</Text>
         </Pressable>
 
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 24,
     color: "#222",
-    marginTop:14
+    marginTop: 14,
     // textAlign: "center",
   },
   label: {

@@ -12,6 +12,7 @@ import { RootStackParamList } from "../App";
 import { useNavigation } from "@react-navigation/native";
 import { signOut } from "@firebase/auth";
 import { auth } from "config/firebase";
+import { StatusBar } from "expo-status-bar";
 
 const recentTransactions = [
   { id: 1, type: "Received", amount: "0.05 BTC", date: "2025-07-23" },
@@ -38,6 +39,7 @@ export default function Dasboard() {
 
   return (
     <ScrollView style={styles.container}>
+      <StatusBar style="dark" />
       {/* Top Section: Wallet Balance */}
       <View style={styles.balanceSection}>
         <Text style={styles.balanceLabel}>Wallet Balance</Text>
@@ -66,7 +68,11 @@ export default function Dasboard() {
             style={styles.actionButton}
             onPress={() => navigation.navigate("SendMoney")}
           >
-            <Icon name="account-balance-wallet" type="material" color="#1DB954" />
+            <Icon
+              name="account-balance-wallet"
+              type="material"
+              color="#1DB954"
+            />
             <Text style={styles.actionText}>Withdraw</Text>
           </TouchableOpacity>
         </View>
@@ -104,7 +110,7 @@ const styles = StyleSheet.create({
   balanceSection: {
     // backgroundColor: "#222",
     // backgroundColor:"#1DB954",
-    backgroundColor:"#FF9900",
+    backgroundColor: "#FF9900",
     borderRadius: 20,
     padding: 24,
     alignItems: "center",
@@ -135,7 +141,7 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     // backgroundColor: "#007AFF",
-    backgroundColor:"#fff",
+    backgroundColor: "#fff",
     borderRadius: 10,
     padding: 16,
     alignItems: "center",
@@ -181,10 +187,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     marginTop: 8,
-    color:"#1DB954"
+    color: "#1DB954",
   },
   logoutButtonText: {
-    color:"#1DB954",
+    color: "#1DB954",
     fontWeight: "bold",
     fontSize: 16,
   },
