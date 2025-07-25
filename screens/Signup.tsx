@@ -15,23 +15,26 @@ import { Icon } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../App";
-import { onAuthStateChanged, signInWithEmailAndPassword } from "@firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+} from "@firebase/auth";
 import { auth } from "config/firebase";
 
-type NavProps = NativeStackNavigationProp<RootStackParamList, "LoginPage">;
+type NavProps = NativeStackNavigationProp<RootStackParamList, "Signup">;
 
-const LoginPage = () => {
+const Signup = () => {
   const navigation = useNavigation<NavProps>();
-  const [Email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async () => {
+  const handleSignup = async () => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!regex.test(Email)) {
+    if (!regex.test(email)) {
       setError("Invalid email address");
       return;
     }
@@ -41,40 +44,36 @@ const LoginPage = () => {
       return;
     }
 
+    setError("");
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      await signInWithEmailAndPassword(auth, Email, password);
+      await createUserWithEmailAndPassword(auth, email, password);
       navigation.replace("Home");
-      setError("");
     } catch (e: any) {
       setIsLoading(false);
       let code = e.code;
-      console.log(code);
       switch (code) {
-        case "auth/invalid-email":
-          setError("Invalid credentials.");
+        case "auth/email-already-in-use":
+          setError("An account with this email already exists.");
           break;
-        case "auth/wrong-password":
-          setError("Invalid credentials.");
-          break;
-        case "auth/user-not-found":
-          setError("Incorrect email or password.");
-          break;
-        case "auth/invalid-credential":
-          setError("Invalid credentials.");
+        case "auth/weak-password":
+          setError(
+            "Your password is too short, please make it 6 characters or more."
+          );
           break;
         case "auth/network-request-failed":
           setError("Network request failed. Please check your connection.");
           break;
         case "auth/too-many-requests":
           setError(
-            "Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or try again later."
+            "Access to this account has been temporarily disabled due to many failed signup attempts. You can immediately restore it by resetting your password or try again later."
           );
           break;
         default:
           setError("There was a problem with your request.");
       }
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -95,13 +94,8 @@ const LoginPage = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={localStyles.container}>
           <View style={localStyles.header}>
-            <Icon
-              name="account-circle"
-              type="material"
-              color="#1DB954"
-              size={60}
-            />
-            <Text style={localStyles.title}>Sign In</Text>
+            <Icon name="person-add" type="material" color="#1DB954" size={60} />
+            <Text style={localStyles.title}>Sign Up</Text>
           </View>
 
           <Text style={localStyles.label}>Email</Text>
@@ -109,7 +103,7 @@ const LoginPage = () => {
             style={localStyles.input}
             placeholder="Email"
             keyboardType="email-address"
-            value={Email}
+            value={email}
             onChangeText={setEmail}
             autoCapitalize="none"
           />
@@ -118,7 +112,7 @@ const LoginPage = () => {
           <View style={localStyles.inputWithIcon}>
             <TextInput
               style={[localStyles.input, { flex: 1, marginBottom: 0 }]}
-              placeholder="Enter your password"
+              placeholder="Create a password"
               keyboardType="default"
               secureTextEntry={!showPassword}
               value={password}
@@ -140,20 +134,24 @@ const LoginPage = () => {
 
           {error ? <Text style={localStyles.error}>{error}</Text> : null}
 
-          <Pressable style={localStyles.button} onPress={handleLogin}>
+          <Pressable
+            style={localStyles.button}
+            onPress={handleSignup}
+            disabled={isLoading}
+          >
             <Text style={localStyles.buttonText}>
-              {isLoading ? "Loading..." : "Login"}
+              {isLoading ? "Signing up..." : "Sign Up"}
             </Text>
           </Pressable>
 
           <Pressable
             style={localStyles.signupLink}
-            onPress={() => navigation.navigate("Signup" as never)}
+            onPress={() => navigation.navigate("LoginPage" as never)}
           >
             <Text style={localStyles.signupText}>
-              Don't have an account?{" "}
+              Already have an account?{" "}
               <Text style={{ color: "#1DB954", fontWeight: "bold" }}>
-                Sign Up
+                Sign In
               </Text>
             </Text>
           </Pressable>
@@ -195,7 +193,7 @@ const localStyles = StyleSheet.create({
     paddingVertical: 12,
     marginBottom: 16,
     fontSize: 16,
-    color: "#222", // <-- add this line
+    color: "#222",
   },
   inputWithIcon: {
     flexDirection: "row",
@@ -228,6 +226,7 @@ const localStyles = StyleSheet.create({
   error: {
     color: "#ff5252",
     marginBottom: 8,
+    textAlign: "center",
     fontSize: 15,
   },
   signupLink: {
@@ -240,4 +239,4 @@ const localStyles = StyleSheet.create({
   },
 });
 
-export default LoginPage;
+export default Signup;
