@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   TextInput,
@@ -10,37 +10,46 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   Platform,
-} from 'react-native';
-import { Icon } from 'react-native-elements';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../App';
+} from "react-native";
+import { Icon } from "react-native-elements";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../App";
+import { signInWithEmailAndPassword } from "@firebase/auth";
+import { auth } from "config/firebase";
 
-type NavProps = NativeStackNavigationProp<RootStackParamList, 'LoginPage'>;
+type NavProps = NativeStackNavigationProp<RootStackParamList, "LoginPage">;
 
 const LoginPage = () => {
   const navigation = useNavigation<NavProps>();
-  const [Email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [Email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleLogin = () => {
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const handleLogin = async () => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!regex.test(Email)) {
-      setError('Invalid email address');
+      setError("Invalid email address");
       return;
     }
 
     if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
+      setError("Password must be at least 6 characters.");
       return;
     }
 
-    setError('');
-    Alert.alert('Login Success', `Welcome, ${Email}`);
-    navigation.replace('Home');
+    try {
+      setIsLoading(true);
+      await signInWithEmailAndPassword(auth, Email, password);
+      navigation.replace("Home");
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+
+    setError("");
   };
 
   return (
@@ -51,7 +60,12 @@ const LoginPage = () => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={localStyles.container}>
           <View style={localStyles.header}>
-            <Icon name="account-circle" type="material" color="#1DB954" size={60} />
+            <Icon
+              name="account-circle"
+              type="material"
+              color="#1DB954"
+              size={60}
+            />
             <Text style={localStyles.title}>Sign In</Text>
           </View>
 
@@ -92,15 +106,20 @@ const LoginPage = () => {
           {error ? <Text style={localStyles.error}>{error}</Text> : null}
 
           <Pressable style={localStyles.button} onPress={handleLogin}>
-            <Text style={localStyles.buttonText}>Login</Text>
+            <Text style={localStyles.buttonText}>
+              {isLoading ? "Loading..." : "Login"}
+            </Text>
           </Pressable>
 
           <Pressable
             style={localStyles.signupLink}
-            onPress={() => navigation.navigate('Signup' as never)}
+            onPress={() => navigation.navigate("Signup" as never)}
           >
             <Text style={localStyles.signupText}>
-              Don't have an account? <Text style={{ color: "#1DB954", fontWeight: "bold" }}>Sign Up</Text>
+              Don't have an account?{" "}
+              <Text style={{ color: "#1DB954", fontWeight: "bold" }}>
+                Sign Up
+              </Text>
             </Text>
           </Pressable>
         </View>
@@ -111,43 +130,44 @@ const LoginPage = () => {
 
 const localStyles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
+    justifyContent: "center",
     flex: 1,
-    backgroundColor: '#f7f8fa',
+    backgroundColor: "#f7f8fa",
     padding: 24,
   },
   header: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 32,
   },
   title: {
     fontSize: 28,
-    fontWeight: 'bold',
-    color: '#222',
+    fontWeight: "bold",
+    color: "#222",
     marginTop: 8,
     marginBottom: 8,
   },
   label: {
     fontSize: 16,
-    color: '#222',
+    color: "#222",
     marginBottom: 8,
     marginLeft: 2,
   },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 8,
-    borderColor: '#e0e0e0',
+    borderColor: "#e0e0e0",
     paddingHorizontal: 14,
     paddingVertical: 12,
     marginBottom: 16,
     fontSize: 16,
+    color: "#222", // <-- add this line
   },
   inputWithIcon: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
     borderRadius: 8,
-    borderColor: '#e0e0e0',
+    borderColor: "#e0e0e0",
     marginBottom: 16,
     paddingRight: 8,
   },
@@ -156,31 +176,31 @@ const localStyles = StyleSheet.create({
     marginLeft: 2,
   },
   button: {
-    backgroundColor: '#1DB954',
+    backgroundColor: "#1DB954",
     paddingVertical: 16,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 8,
     marginBottom: 16,
     elevation: 2,
   },
   buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
     fontSize: 18,
     letterSpacing: 1,
   },
   error: {
-    color: '#ff5252',
+    color: "#ff5252",
     marginBottom: 8,
     fontSize: 15,
   },
   signupLink: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 8,
   },
   signupText: {
-    color: '#222',
+    color: "#222",
     fontSize: 15,
   },
 });
