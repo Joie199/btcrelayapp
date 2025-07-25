@@ -46,13 +46,12 @@ Built for seamless and instant Bitcoin payments in Uganda’s local currency eco
 Here’s a glimpse of our workflow and design thinking:
 
 
-<img src="sharing the mind map/app-flowchart(v1).png" />
 <img src="sharing the mind map/bitnob - Hackathon(v3).png" />
+<img src="sharing the mind map/app-flowchart(V2).png" />
 <img src="screenshots/app/mainlayout.jpg" />
 <img src="screenshots/app/venderloginpage.jpg" />
 <img src="screenshots/site/products list.png" />
 <img src="screenshots/site/qrtopay.png" />
-<img src="sharing the mind map/app-flowchart(V2).png" />
 
 
 
