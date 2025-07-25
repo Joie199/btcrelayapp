@@ -118,7 +118,7 @@ Thanks to all the contributors who helped build BTC Relay App!
 
 ### Team Members / Contributors
 
-- [@John](https://github.com/Joie199)
+- [@Yohannes Amanuel](https://github.com/Joie199)
 - [@Samir Ibrahim](https://github.com/samiromer2)
 - [@Emmanuel Ojok](https://github.com/ojokne)
 <!-- Add more GitHub usernames here -->
